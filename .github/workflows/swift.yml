@@ -19,6 +19,7 @@ jobs:
         with:
           spec: project.yml
           version: '2.15.1'
+          project: PRORecipies
       - run: |
           xcodebuild -project PRORecipies/PRORecipies.xcodeproj \
             CODE_SIGN_IDENTITY=""
