@@ -1,4 +1,4 @@
-whitelist_rules: # Can not be specified alongside disabled_rules or opt_in_rules.
+only_rules: # Can not be specified alongside disabled_rules or opt_in_rules.
 # Acts as a whitelist, only the rules specified in this list will be enabled.
  - closing_brace
  - colon
