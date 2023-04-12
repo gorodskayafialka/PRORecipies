@@ -20,7 +20,7 @@ jobs:
           spec: project.yml
           version: '2.15.1'
       - run: |
-          xcodebuild -project PRORecipies.xcodeproj \
+          xcodebuild -project PRORecipies/PRORecipies.xcodeproj \
             CODE_SIGN_IDENTITY=""
   swiftlint:
     runs-on: ubuntu-latest
