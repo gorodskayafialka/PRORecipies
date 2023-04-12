@@ -12,9 +12,12 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-      - uses: xavierLowmiller/xcodegen-action@1.1.2
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Generate project
+        uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
-          spec: project.yaml
+          spec: project.yml
           quiet: true
           version: '2.15.1'
       - run: |
