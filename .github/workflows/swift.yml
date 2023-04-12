@@ -12,9 +12,15 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Generate project
+        uses: xavierLowmiller/xcodegen-action@1.1.2
+        with:
+          spec: project.yml
+          version: '2.17.0'
       - run: |
-          xcodebuild -project PRORecipies/PRORecipies.xcodeproj \
+          xcodebuild -project PRORecipies.xcodeproj \
             CODE_SIGN_IDENTITY=""
   swiftlint:
     runs-on: ubuntu-latest
