@@ -1,0 +1,71 @@
+name: PRORecipies
+
+options:
+  minimumXcodeGenVersion: 2.17
+  deploymentTarget:
+    iOS: "15.5"
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  defaultConfig: Debug
+  developmentLanguage: ru
+
+fileGroups:
+  - PRORecipies
+
+configs:
+  Debug: debug
+  Release: release
+
+settings:
+  base:
+    SWIFT_VERSION: 5.5
+    ENABLE_TESTABILITY: YES
+    GENERATE_INFOPLIST_FILE: YES
+    INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.finance"
+    INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+    INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+    INFOPLIST_KEY_UILaunchScreen_Generation: YES
+    INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+  configs:
+    Debug:
+      ENABLE_TESTABILITY: YES
+      SWIFT_COMPILATION_MODE: singlefile
+      SWIFT_OPTIMIZATION_LEVEL: -Onone
+      VALIDATE_PRODUCT: NO
+    Release:
+      ENABLE_TESTABILITY: NO
+      SWIFT_COMPILATION_MODE: wholemodule
+      SWIFT_OPTIMIZATION_LEVEL: -O
+      VALIDATE_PRODUCT: YES
+
+targets:
+
+  PRORecipies:
+    type: application
+    platform: iOS
+    deploymentTarget: 16.0
+    sources:
+      - path: PRORecipies
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: "1"
+        ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: $(inherited)
+        PRODUCT_BUNDLE_IDENTIFIER: "PRORecipies-Team.PRORecipies"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_ASSET_PATHS: "\"PRORecipies/Preview Content\""
+        ENABLE_PREVIEWS: YES
+        MARKETING_VERSION: 1.0.0
+        CURRENT_PROJECT_VERSION: 1.0.0
+        CODE_SIGN_IDENTITY: iPhone Developer
+        DEFINES_MODULE: YES
+        XCODEGEN_STATE: YES
+        PRODUCT_NAME: "$(TARGET_NAME)"
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        LD_RUNPATH_SEARCH_PATHS:
+        - "$(inherited)"
+        - "@executable_path/Frameworks"
+
