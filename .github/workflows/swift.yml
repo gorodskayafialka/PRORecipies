@@ -18,7 +18,6 @@ jobs:
         uses: xavierLowmiller/xcodegen-action@1.1.2
         with:
           spec: project.yml
-          quiet: false
           version: '2.15.1'
       - run: |
           xcodebuild -project PRORecipies.xcodeproj \
