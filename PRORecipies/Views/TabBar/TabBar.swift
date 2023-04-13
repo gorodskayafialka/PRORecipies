@@ -21,18 +21,18 @@ struct TabBar: View {
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
             TabView(selection: $selectedTab) {
-                Color.purple
+                HomeView()
                     .ignoresSafeArea(.all, edges: .all)
-                    .tag(Tab.home.rawValue)
-                Color.purple
+                    .tag(tabItems[0])
+                ExploreView()
                     .ignoresSafeArea(.all, edges: .all)
-                    .tag(Tab.explore.rawValue)
-                Color.purple
+                    .tag(tabItems[1])
+                FavoritesView()
                     .ignoresSafeArea(.all, edges: .all)
-                    .tag(Tab.favorites.rawValue)
-                Color.blue
+                    .tag(tabItems[2])
+                ListView()
                     .ignoresSafeArea(.all, edges: .all)
-                    .tag(Tab.list.rawValue)
+                    .tag(tabItems[3])
             }
 
             HStack(spacing: 0) {
