@@ -9,9 +9,19 @@ import SwiftUI
 
 @main
 struct PRORecipiesApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
+	private var networkService: NetworkService
+
+	init() {
+		networkService = NetworkService(
+            baseURL: URLFactory.urlString,
+			dataFetcher: DataFetcher(
+				fetch: URLSession(configuration: .default, delegate: nil, delegateQueue: .main).fetchRequest)
+		)
+	}
+
+	var body: some Scene {
+		WindowGroup {
+			ContentView()
+		}
+	}
 }
