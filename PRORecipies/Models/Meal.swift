@@ -15,7 +15,7 @@ struct Meals: Decodable {
     let meals: [Meal]
 }
 
-struct Meal {
+struct Meal: Identifiable {
     let id: String // idMeal
     let name: String? // strMeal
     let thumbnailLink: String? // strMealThumb

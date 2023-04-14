@@ -11,25 +11,8 @@ struct ContentView: View {
     @AppStorage("selectedTab") var selectedTab: Tab = .home
 
     var body: some View {
-        ZStack {
-            Group {
-                switch selectedTab {
-                case .home:
-                    HomeView()
-                case .explore:
-                    ExploreView()
-                case .favorites:
-                    FavoritesView()
-                case .list:
-                    ListView()
-                }
-            }
-            .safeAreaInset(edge: .bottom) {
-                VStack {}.frame(height: 44)
-            }
-
-            TabBar()
-        }
+        TabBar()
+            .environmentObject(UIModel())
     }
 }
 

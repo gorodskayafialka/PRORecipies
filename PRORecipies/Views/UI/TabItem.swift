@@ -15,7 +15,7 @@ struct TabItem: Identifiable, Hashable, Equatable {
     var selection: Tab
 }
 
-enum Tab: String {
+enum Tab: String, Equatable {
     case home = "Home"
     case explore = "Explore"
     case favorites = "Favorites"
@@ -45,7 +45,7 @@ extension Tab {
     }
 
     private var color: Color {
-        Color.blue
+        Color.gray
     }
 
     private var selection: Tab {
