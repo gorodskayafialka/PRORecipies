@@ -19,19 +19,21 @@ struct MealView: View {
     var body: some View {
         ZStack {
             ScrollView {
-                cover
+                VStack {
+                    cover
+                    listSwitcherForm
+                }
             }
             .coordinateSpace(name: "scroll")
             .background(Color("Background"))
             .mask(RoundedRectangle(cornerRadius: appear ? 0 : 30))
             .background(.ultraThinMaterial)
             .ignoresSafeArea()
-
             closeButton
         }
         .zIndex(1)
         .onAppear { fadeIn() }
-        .onChange(of: model.showDetail) { show in
+        .onChange(of: model.showDetail) { _ in
            fadeOut()
         }
     }
@@ -55,7 +57,6 @@ struct MealView: View {
                 Spacer()
             }
             .frame(maxWidth: .infinity)
-            .frame(height: scrollY > 0 ? 500 + scrollY : 500)
             .background(
                 banner
                     .offset(y: scrollY > 0 ? -scrollY : 0)
@@ -73,9 +74,11 @@ struct MealView: View {
                     .frame(maxHeight: .infinity, alignment: .bottom)
                     .offset(y: 100)
                     .padding(20)
+                    .padding(.bottom, 20)
             )
         }
-        .frame(height: 500)
+        .frame(height: UIScreen.main.bounds.width)
+        .padding(.bottom, 50)
     }
 
     var banner: some View {
@@ -133,9 +136,24 @@ struct MealView: View {
            .opacity(appear ? 1 : 0)
     }
 
+    var listSwitcherForm: some View {
+        ListsSwitcher(ingredientsList: meal.ingredients ?? [],
+                      instructions: meal.instructions ?? "")
+        .background(
+            blurCard
+        )
+        .background(
+            cardForm
+        )
+        .padding(20)
+        .matchedGeometryEffect(id: "blurSwitch\(meal)", in: namespace)
+        .opacity(appear ? 1 : 0)
+    }
+
     func close() {
         withAnimation {
             viewStateSize = .zero
+
         }
         withAnimation(.closeCard.delay(0.2)) {
             model.showDetail = false
@@ -146,12 +164,14 @@ struct MealView: View {
     func fadeIn() {
         withAnimation(.easeOut.delay(0.3)) {
             appear = true
+
         }
     }
 
     func fadeOut() {
         withAnimation(.easeIn(duration: 0.1)) {
             appear = false
+
         }
     }
 }

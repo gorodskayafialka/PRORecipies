@@ -13,7 +13,6 @@ struct HomeView: View {
 
     @State var selectedMeal = Meals.dummyData[0]
     @State var showMeal = false
-
     var featuredMeals = Meals.dummyData
     var meals = Meals.dummyData1
 
@@ -47,7 +46,7 @@ struct HomeView: View {
 
                 if model.showDetail {
                     LazyVStack(spacing: 20) {
-                        ForEach(featuredMeals) { meal in
+                        ForEach(featuredMeals) { _ in
                             Rectangle()
                                 .fill(.white)
                                 .frame(height: 300)
