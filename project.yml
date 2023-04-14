@@ -3,7 +3,7 @@ name: PRORecipies
 options:
   minimumXcodeGenVersion: 2.17
   deploymentTarget:
-    iOS: "15.5"
+    iOS: "16.0"
   groupSortPosition: top
   generateEmptyDirectories: true
   defaultConfig: Debug
