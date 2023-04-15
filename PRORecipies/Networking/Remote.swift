@@ -10,7 +10,7 @@ import Foundation
 struct Remote<Args, Response>: CustomDebugStringConvertible {
     private var request: (Args) async throws -> Response
     var debugDescription: String
-    
+
     func callAsFunction(_ args: Args) async throws -> Response {
         try await request(args)
     }

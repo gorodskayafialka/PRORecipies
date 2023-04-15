@@ -10,7 +10,7 @@ import Foundation
 struct NetworkService {
     var randomMeal: Remote<Void, Meals>
     var search: Remote<String, Meals>
-    
+
     init(
         baseURL: URL,
         dataFetcher: DataFetcher
@@ -26,23 +26,23 @@ struct NetworkService {
                 fetcher: dataFetcher
             )
         }
-        
+
         func makeRemoteSpec<Args>(
             argsInterpreter: @escaping (Args) throws -> RequestParts
         ) -> RemoteSpec<Args, Data, Void> {
             makeRemoteSpec(argsInterpreter: argsInterpreter, decoder: { _ in () })
         }
-        
+
         func makeRemoteSpec<Args, Response: Decodable>(
             argsInterpreter: @escaping (Args) throws -> RequestParts
         ) -> RemoteSpec<Args, Data, Response> {
             makeRemoteSpec(argsInterpreter: argsInterpreter, decoder: decodeJSON)
         }
-        
+
         randomMeal = .from(makeRemoteSpec {  _ in
             RequestParts(path: "random.php")
         })
-        
+
         search = .from(makeRemoteSpec {
             RequestParts(path: "search.php", query: queryItem(for: "s", value: $0))
         })
