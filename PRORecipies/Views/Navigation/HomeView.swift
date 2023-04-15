@@ -13,7 +13,8 @@ struct HomeView: View {
 
     @State var selectedMeal = Meals.dummyData[0]
     @State var showMeal = false
-    var featuredMeals = Meals.dummyData
+
+    var featuredMeals = Meals.dummyData2
     var meals = Meals.dummyData1
 
     var body: some View {
@@ -46,7 +47,7 @@ struct HomeView: View {
 
                 if model.showDetail {
                     LazyVStack(spacing: 20) {
-                        ForEach(featuredMeals) { _ in
+                        ForEach(featuredMeals) { meal in
                             Rectangle()
                                 .fill(.white)
                                 .frame(height: 300)
@@ -100,13 +101,23 @@ struct HomeView: View {
                                 radius: 30, x: 0, y: 30)
                         .blur(radius: abs(reader.frame(in: .global).minX) / 40)
                         .overlay(
-                            Image("Food")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 200)
-                                .cornerRadius(30)
-                                .padding(.horizontal, 15)
-                                .offset(x: reader.frame(in: .global).minX / 2, y: -60)
+                            CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
+                                if let image = phase.image {
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(height: 200)
+                                        .cornerRadius(30)
+                                        .padding(.horizontal, 15)
+                                        .offset(x: reader.frame(in: .global).minX / 2, y: -60)
+                                } else {
+                                    ProgressView()
+                                        .offset(y: -30)
+                                }
+                            }, placeholder: {
+                                ProgressView()
+                                    .offset(y: -30)
+                            })
                         )
                         .padding(20)
                         .onTapGesture {
