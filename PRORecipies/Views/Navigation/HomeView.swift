@@ -13,8 +13,9 @@ struct HomeView: View {
 
     @State var selectedMeal = Meals.dummyData[0]
     @State var showMeal = false
+    @State var contentHasScrolled = false
 
-    var featuredMeals = Meals.dummyData2
+    var featuredMeals = Meals.dummyData
     var meals = Meals.dummyData1
 
     var body: some View {
@@ -26,28 +27,24 @@ struct HomeView: View {
             }
 
             ScrollView {
+                scrollDetection
 
-                // TODO: make reusable subview
-                Text("Featured")
-                    .font(.title.weight(.semibold))
-                    .foregroundColor(.primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 50)
+                Rectangle()
+                    .frame(width: 100, height: 72)
+                    .opacity(0)
 
                 featured
 
-                // TODO: make reusable subview
-                Text("Meals")
-                    .font(.title.weight(.semibold))
-                    .foregroundColor(.primary)
+                Text("Meals".uppercased())
+                    .font(.body.weight(.semibold))
+                    .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(20)
-                    .offset(y: -110)
+                    .offset(y: -100)
 
                 if model.showDetail {
                     LazyVStack(spacing: 20) {
-                        ForEach(featuredMeals) { meal in
+                        ForEach(featuredMeals) { _ in
                             Rectangle()
                                 .fill(.white)
                                 .frame(height: 300)
@@ -66,12 +63,15 @@ struct HomeView: View {
                     .offset(y: -110)
                 }
             }
+            .coordinateSpace(name: "scroll")
         }
         .onChange(of: model.showDetail) { _ in
             withAnimation {
                 model.showTab.toggle()
+                model.showNav.toggle()
             }
         }
+        .overlay(NavigationBar(title: NavigationTitle.home.rawValue, contentHasScrolled: $contentHasScrolled))
     }
 
     var detail: some View {
@@ -101,23 +101,13 @@ struct HomeView: View {
                                 radius: 30, x: 0, y: 30)
                         .blur(radius: abs(reader.frame(in: .global).minX) / 40)
                         .overlay(
-                            CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
-                                if let image = phase.image {
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(height: 200)
-                                        .cornerRadius(30)
-                                        .padding(.horizontal, 15)
-                                        .offset(x: reader.frame(in: .global).minX / 2, y: -60)
-                                } else {
-                                    ProgressView()
-                                        .offset(y: -30)
-                                }
-                            }, placeholder: {
-                                ProgressView()
-                                    .offset(y: -30)
-                            })
+                            Image("Food")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 200)
+                                .cornerRadius(30)
+                                .padding(.horizontal, 15)
+                                .offset(x: reader.frame(in: .global).minX / 2, y: -60)
                         )
                         .padding(20)
                         .onTapGesture {
@@ -132,7 +122,22 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $showMeal) {
             MealView(namespace: namespace, meal: $selectedMeal)
         }
+    }
 
+    var scrollDetection: some View {
+        GeometryReader { proxy in
+            let offset = proxy.frame(in: .named("scroll")).minY
+            Color.clear.preference(key: ScrollPreferenceKey.self, value: offset)
+        }
+        .onPreferenceChange(ScrollPreferenceKey.self) { value in
+            withAnimation(.easeInOut) {
+                if value < 0 {
+                    contentHasScrolled = true
+                } else {
+                    contentHasScrolled = false
+                }
+            }
+        }
     }
 }
 
