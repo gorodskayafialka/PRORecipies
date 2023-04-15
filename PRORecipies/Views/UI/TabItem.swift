@@ -22,6 +22,13 @@ enum Tab: String, Equatable {
     case list = "List"
 }
 
+enum NavigationTitle: String {
+    case home = "PRORecipes"
+    case explore = "Explore"
+    case favorites = "Favorites"
+    case list = "List"
+}
+
 extension Tab {
     var tabItem: TabItem {
         TabItem(name: name, icon: icon.rawValue, color: color, selection: selection)
