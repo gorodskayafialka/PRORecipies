@@ -11,12 +11,12 @@ struct HomeView: View {
     @EnvironmentObject var model: UIModel
     @Namespace var namespace
 
-    @State var selectedMeal = Meals.dummyData[0]
+    @State var selectedMeal = Meals.dummyData1.meals[0]
     @State var showMeal = false
     @State var contentHasScrolled = false
 
-    var featuredMeals = Meals.dummyData
-    var meals = Meals.dummyData1
+    var featuredMeals = Meals.dummyData1.meals
+    var meals = Meals.dummyData2.meals
 
     var body: some View {
         ZStack {

@@ -82,7 +82,7 @@ struct MealItem_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealItem(namespace: namespace, meal: Meals.dummyData[0])
+        MealItem(namespace: namespace, meal: Meals.dummyData1.meals[0])
             .environmentObject(UIModel())
     }
 }

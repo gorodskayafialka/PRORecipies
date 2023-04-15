@@ -27,3 +27,19 @@ extension Remote where Args == Void {
         try await callAsFunction(())
     }
 }
+
+extension Remote {
+    static func mock(delay: TimeInterval = 0, _ response: Response) -> Self {
+        Remote(request: { _ in
+            try? await Task.sleep(nanoseconds: UInt64(max(delay, 0) * 1_000_000_000))
+            return response
+        }, debugDescription: "mock")
+    }
+
+    static func mock(delay: TimeInterval = 0, _ fetch: @escaping (Args) async throws -> Response) -> Self {
+      Remote(request: {
+        try? await Task.sleep(nanoseconds: UInt64(max(delay, 0) * 1_000_000_000))
+        return try await fetch($0)
+      }, debugDescription: "mock")
+    }
+}

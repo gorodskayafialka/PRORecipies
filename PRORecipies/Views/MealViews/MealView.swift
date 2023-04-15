@@ -168,7 +168,7 @@ struct MealView: View {
         }
         withAnimation(.closeCard.delay(0.2)) {
             model.showDetail = false
-            model.selectedMeal = Meals.dummyData[0].id
+            model.selectedMeal = Meals.dummyData1.meals[0].id
         }
     }
 
@@ -191,7 +191,7 @@ struct MealView_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealView(namespace: namespace, meal: .constant(Meals.dummyData[0]))
+        MealView(namespace: namespace, meal: .constant(Meals.dummyData1.meals[0]))
             .environmentObject(UIModel())
     }
 }
