@@ -10,8 +10,8 @@ import Foundation
 struct NetworkService {
     var randomMeal: Remote<Void, Meals>
     var search: Remote<String, Meals>
-    var latestMeals: Remote<String, Meals>
-    var setRandomMeals: Remote<String, Meals>
+    var latestMeals: Remote<Void, Meals>
+    var setRandomMeals: Remote<Void, Meals>
     var mealByID: Remote<String, Meals>
 
     init(
