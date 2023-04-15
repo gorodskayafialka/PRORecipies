@@ -11,12 +11,11 @@ struct HomeView: View {
     @EnvironmentObject var model: UIModel
     @Namespace var namespace
 
-    @State var selectedMeal = Meals.dummyData[0]
+    //@State var selectedMeal: Meal.ID = "-1" ///Meals.dummyData[0]
     @State var showMeal = false
     @State var contentHasScrolled = false
 
-    var featuredMeals = Meals.dummyData
-    var meals = Meals.dummyData1
+    @ObservedObject var viewModel: HomeViewModel
 
     var body: some View {
         ZStack {
@@ -44,7 +43,7 @@ struct HomeView: View {
 
                 if model.showDetail {
                     LazyVStack(spacing: 20) {
-                        ForEach(featuredMeals) { _ in
+                        ForEach(viewModel.featuredMeals) { _ in
                             Rectangle()
                                 .fill(.white)
                                 .frame(height: 300)
@@ -65,6 +64,9 @@ struct HomeView: View {
             }
             .coordinateSpace(name: "scroll")
         }
+        .onAppear {
+            viewModel.fetchMeals()
+        }
         .onChange(of: model.showDetail) { _ in
             withAnimation {
                 model.showTab.toggle()
@@ -75,22 +77,22 @@ struct HomeView: View {
     }
 
     var detail: some View {
-        ForEach(meals) { meal in
-            if meal.id == model.selectedMeal {
+        ForEach(viewModel.meals) { meal in
+            if meal.id == viewModel.selectedMeal {
                 MealView(namespace: namespace, meal: .constant(meal))
             }
         }
     }
 
     var meal: some View {
-        ForEach(meals) { meal in
+        ForEach(viewModel.meals) { meal in
             MealItem(namespace: namespace, meal: meal)
         }
     }
 
     var featured: some View {
         TabView {
-            ForEach(featuredMeals) { meal in
+            ForEach(viewModel.featuredMeals) { meal in
                 GeometryReader { reader in
                     FeaturedMeal(meal: meal)
                         .rotation3DEffect(
@@ -101,18 +103,28 @@ struct HomeView: View {
                                 radius: 30, x: 0, y: 30)
                         .blur(radius: abs(reader.frame(in: .global).minX) / 40)
                         .overlay(
-                            Image("Food")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 200)
-                                .cornerRadius(30)
-                                .padding(.horizontal, 15)
-                                .offset(x: reader.frame(in: .global).minX / 2, y: -60)
+                            CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
+                                if let image = phase.image {
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(height: 200)
+                                        .cornerRadius(30)
+                                        .padding(.horizontal, 15)
+                                        .offset(x: reader.frame(in: .global).minX / 2, y: -60)
+                                } else {
+                                    ProgressView()
+                                        .offset(y: -30)
+                                }
+                            }, placeholder: {
+                                ProgressView()
+                                    .offset(y: -30)
+                            })
                         )
                         .padding(20)
                         .onTapGesture {
                             showMeal = true
-                            selectedMeal = meal
+                            viewModel.selectedMeal = meal
                         }
                 }
             }
@@ -121,6 +133,7 @@ struct HomeView: View {
         .frame(height: 460)
         .fullScreenCover(isPresented: $showMeal) {
             MealView(namespace: namespace, meal: $selectedMeal)
+//            MealView(namespace: namespace, meal: Binding(get: { selectedMeal! }, set: { selectedMeal = $0 }))
         }
     }
 
@@ -141,12 +154,12 @@ struct HomeView: View {
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-            .environmentObject(UIModel())
-    }
-}
+//struct HomeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView(viewModel: HomeViewModel(backend: <#T##NetworkService#>))
+//            .environmentObject(UIModel())
+//    }
+//}
 
 struct ScrollPreferenceKey: PreferenceKey {
     static var defaultValue: CGFloat = 0

@@ -9,9 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("selectedTab") var selectedTab: Tab = .home
+    private var networkService: NetworkService
+    
+    init() {
+        networkService = NetworkService(
+            baseURL: URLFactory.applicationAPI,
+            dataFetcher: DataFetcher(
+                fetch: URLSession(configuration: .default, delegate: nil, delegateQueue: .main).fetchRequest)
+        )
+    }
 
     var body: some View {
-        TabBar()
+        TabBar(networkService: networkService)
             .environmentObject(UIModel())
     }
 }
