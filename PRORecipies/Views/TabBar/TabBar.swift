@@ -14,7 +14,6 @@ struct TabBar: View {
     @Namespace var animation
     @EnvironmentObject var model: UIModel
 
-
     init() {
         UITabBar.appearance().isHidden = true
         tabItems = Tab.allCases.map { $0.tabItem }
@@ -57,7 +56,8 @@ struct TabBar: View {
                             selectedTab = tabItem
                             xAxis = reader.frame(in: .global).minX
                         }
-                    }) {
+                    }
+                    ) {
                         Image(systemName: tabItem.icon)
                             .resizable()
                             .renderingMode(.template)
@@ -67,7 +67,10 @@ struct TabBar: View {
                             .padding(selectedTab == tabItem ? 15 : 0)
                             .background(Color("Shadow").opacity(selectedTab == tabItem ? 0.7 : 0), in: Circle())
                             .matchedGeometryEffect(id: tabItem, in: animation)
-                            .offset(x: selectedTab == tabItem ? (reader.frame(in: .global).minX - reader.frame(in: .global).midX) : 0, y: selectedTab == tabItem ? -45 : 0)
+                            .offset(
+                                x: selectedTab == tabItem ?
+                                (reader.frame(in: .global).minX - reader.frame(in: .global).midX) : 0,
+                                y: selectedTab == tabItem ? -45 : 0)
                     }
                     .onAppear {
                         if tabItem == tabItems.first {
