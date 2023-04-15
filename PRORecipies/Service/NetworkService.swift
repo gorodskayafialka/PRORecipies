@@ -10,6 +10,9 @@ import Foundation
 struct NetworkService {
     var randomMeal: Remote<Void, Meals>
     var search: Remote<String, Meals>
+    var latestMeals: Remote<String, Meals>
+    var setRandomMeals: Remote<String, Meals>
+    var mealByID: Remote<String, Meals>
 
     init(
         baseURL: URL,
@@ -45,6 +48,18 @@ struct NetworkService {
 
         search = .from(makeRemoteSpec {
             RequestParts(path: "search.php", query: queryItem(for: "s", value: $0))
+        })
+
+        latestMeals = .from(makeRemoteSpec { _ in
+            RequestParts(path: "latest.php")
+        })
+
+        setRandomMeals = .from(makeRemoteSpec { _ in
+            RequestParts(path: "randomselection.php")
+        })
+
+        mealByID = .from(makeRemoteSpec {
+            RequestParts(path: "lookup.php", query: queryItem(for: "i", value: $0))
         })
     }
 }
