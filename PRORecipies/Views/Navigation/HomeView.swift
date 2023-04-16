@@ -32,7 +32,7 @@ struct HomeView: View {
                     .frame(width: 100, height: 72)
                     .opacity(0)
 
-                featured
+                featured.padding(.bottom, 20)
 
                 Text("Meals".uppercased())
                     .font(.body.weight(.semibold))
@@ -96,8 +96,7 @@ struct HomeView: View {
                             .degrees(reader.frame(in: .global).minX / -10),
                             axis: (x: 0, y: 1, z: 0), perspective: 1
                         )
-                        .shadow(color: Color("Shadow").opacity(0.3),
-                                radius: 30, x: 0, y: 30)
+                        .shadow(radius: 20, x: 0, y: 20)
                         .blur(radius: abs(reader.frame(in: .global).minX) / 40)
                         .overlay(
                             CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
