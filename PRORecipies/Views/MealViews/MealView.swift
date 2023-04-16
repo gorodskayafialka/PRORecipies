@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MealView: View {
     var namespace: Namespace.ID
-    @Binding var meal: Meal
+    var meal: Meal
     @State var viewStateSize: CGSize = .zero
     @State var appear = false
     @EnvironmentObject var model: UIModel
@@ -191,7 +191,7 @@ struct MealView_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealView(namespace: namespace, meal: .constant(Meals.dummyData1.meals[0]))
+        MealView(namespace: namespace, meal: Meals.dummyData1.meals[0])
             .environmentObject(UIModel())
     }
 }

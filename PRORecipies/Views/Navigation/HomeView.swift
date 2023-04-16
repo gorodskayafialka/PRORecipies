@@ -11,9 +11,8 @@ struct HomeView: View {
     @EnvironmentObject var model: UIModel
     @Namespace var namespace
 
-    @State var selectedMeal = Meals.dummyData1.meals[0]
-    @State var showMeal = false
-    @State var contentHasScrolled = false
+    @State private var contentHasScrolled = false
+    @State private var selectedFeatureMeal: Meal? = nil
 
     private var featuredMeals = Meals.dummyData1.meals
     private var meals = Meals.dummyData2.meals
@@ -77,7 +76,7 @@ struct HomeView: View {
     var detail: some View {
         ForEach(meals) { meal in
             if meal.id == model.selectedMeal {
-                MealView(namespace: namespace, meal: .constant(meal))
+                MealView(namespace: namespace, meal: meal)
             }
         }
     }
@@ -118,16 +117,15 @@ struct HomeView: View {
                         )
                         .padding(20)
                         .onTapGesture {
-                            showMeal = true
-                            selectedMeal = meal
+                            selectedFeatureMeal = meal
                         }
                 }
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .frame(height: 460)
-        .fullScreenCover(isPresented: $showMeal) {
-            MealView(namespace: namespace, meal: $selectedMeal)
+        .fullScreenCover(item: $selectedFeatureMeal) {
+            MealView(namespace: namespace, meal: $0)
         }
     }
 
