@@ -13,7 +13,9 @@ struct NetworkService {
     var latestMeals: Remote<Void, Meals>
     var setRandomMeals: Remote<Void, Meals>
     var mealByID: Remote<String, Meals>
+}
 
+extension NetworkService {
     init(
         baseURL: URL,
         dataFetcher: DataFetcher
