@@ -15,8 +15,8 @@ struct HomeView: View {
     @State var showMeal = false
     @State var contentHasScrolled = false
 
-    var featuredMeals = Meals.dummyData1.meals
-    var meals = Meals.dummyData2.meals
+    private var featuredMeals = Meals.dummyData1.meals
+    private var meals = Meals.dummyData2.meals
 
     var body: some View {
         ZStack {
@@ -101,13 +101,20 @@ struct HomeView: View {
                                 radius: 30, x: 0, y: 30)
                         .blur(radius: abs(reader.frame(in: .global).minX) / 40)
                         .overlay(
-                            Image("Food")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 200)
-                                .cornerRadius(30)
-                                .padding(.horizontal, 15)
-                                .offset(x: reader.frame(in: .global).minX / 2, y: -60)
+                            CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
+                                if let image = phase.image {
+                                    image.resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(height: 200)
+                                        .cornerRadius(30)
+                                        .padding(.horizontal, 15)
+                                        .offset(x: reader.frame(in: .global).minX / 2, y: -60)
+                                } else {
+                                    ProgressView().offset(y: -30)
+                                }
+                            }, placeholder: {
+                                    ProgressView().offset(y: -30)
+                            })
                         )
                         .padding(20)
                         .onTapGesture {
