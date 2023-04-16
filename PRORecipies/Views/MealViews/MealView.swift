@@ -12,7 +12,8 @@ struct MealView: View {
     var meal: Meal
     @State var viewStateSize: CGSize = .zero
     @State var appear = false
-    @EnvironmentObject var model: UIModel
+    @Binding var showDetail: Bool
+    var onClose: (() -> ())? = nil
 
     @Environment(\.dismiss) var dismiss
 
@@ -33,20 +34,20 @@ struct MealView: View {
         }
         .zIndex(1)
         .onAppear { fadeIn() }
-        .onChange(of: model.showDetail) { _ in
+        .onChange(of: showDetail) { _ in
            fadeOut()
         }
     }
 
     var closeButton: some View {
         Button {
-            model.showDetail ? close() : dismiss()
+            showDetail ? close() : dismiss()
         } label: {
             CloseButton()
         }
         .padding(30)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-        .offset(y: model.showDetail ? 50 : 0)
+        .offset(y: showDetail ? 50 : 0)
     }
 
     var cover: some View {
@@ -167,8 +168,9 @@ struct MealView: View {
 
         }
         withAnimation(.closeCard.delay(0.2)) {
-            model.showDetail = false
-            model.selectedMeal = Meals.dummyData1.meals[0].id
+            showDetail = false
+            guard let onClose = onClose else { return }
+            onClose()
         }
     }
 
@@ -191,7 +193,11 @@ struct MealView_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealView(namespace: namespace, meal: Meals.dummyData1.meals[0])
-            .environmentObject(UIModel())
+        MealView(
+            namespace: namespace,
+            meal: Meals.dummyData1.meals[0],
+            showDetail: .constant(true),
+            onClose: { }
+        )
     }
 }

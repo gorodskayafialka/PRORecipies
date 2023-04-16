@@ -12,7 +12,7 @@ struct TabBar: View {
     @State var selectedTab = Tab.home.tabItem
     @State var xAxis: CGFloat = 0
     @Namespace var animation
-    @EnvironmentObject var model: UIModel
+    @EnvironmentObject var uiViewModel: UIViewModel
     private let networkService: NetworkService
 
     init(networkService: NetworkService) {
@@ -24,8 +24,8 @@ struct TabBar: View {
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
             TabView(selection: $selectedTab) {
-                HomeView()
-                    .environmentObject(model)
+                HomeView(homeViewModel: HomeViewModel(networkService: networkService))
+                    .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[0])
                 ExploreView()
@@ -41,7 +41,7 @@ struct TabBar: View {
 
             customTabs
                 .ignoresSafeArea(.all, edges: .bottom)
-                .offset(y: model.showTab ? 0 : 200)
+                .offset(y: uiViewModel.showTab ? 0 : 200)
                 .onAppear {
                     selectedTab = tabItems.first ?? Tab.home.tabItem
                 }
@@ -99,6 +99,6 @@ struct TabBar: View {
 struct TabBar_Previews: PreviewProvider {
     static var previews: some View {
         TabBar(networkService: .mock)
-            .environmentObject(UIModel())
+            .environmentObject(UIViewModel())
     }
 }

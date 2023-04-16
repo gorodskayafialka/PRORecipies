@@ -8,20 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var model: UIModel
+    @EnvironmentObject var uiViewModel: UIViewModel
+    @StateObject var homeViewModel: HomeViewModel
     @Namespace var namespace
 
     @State private var contentHasScrolled = false
     @State private var selectedFeatureMeal: Meal? = nil
 
-    private var featuredMeals = Meals.dummyData1.meals
-    private var meals = Meals.dummyData2.meals
 
     var body: some View {
         ZStack {
             Color("Background")
 
-            if model.showDetail {
+            if homeViewModel.showDetail {
                 detail
             }
 
@@ -41,55 +40,68 @@ struct HomeView: View {
                     .padding(20)
                     .offset(y: -100)
 
-                if model.showDetail {
-                    LazyVStack(spacing: 20) {
-                        ForEach(featuredMeals) { _ in
-                            Rectangle()
-                                .fill(.white)
-                                .frame(height: 300)
-                                .cornerRadius(30)
-                                .shadow(color: Color("Shadow").opacity(0.2), radius: 20, x: 0, y: 10)
-                                .opacity(0.3)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .offset(y: -110)
+                if homeViewModel.showDetail {
+                    dummyList
+                        .padding(.horizontal, 20)
+                        .offset(y: -110)
                 } else {
-                    LazyVStack(spacing: 20) {
-                        meal.frame(height: 300)
-                    }
-                    .padding(.horizontal, 20)
-                    .offset(y: -110)
+                    list
+                        .padding(.horizontal, 20)
+                        .offset(y: -110)
                 }
             }
             .coordinateSpace(name: "scroll")
         }
-        .onChange(of: model.showDetail) { _ in
+        .onAppeared() {
+            homeViewModel.fetchMeals()
+        }
+        .onChange(of: homeViewModel.showDetail) { _ in
             withAnimation {
-                model.showTab.toggle()
-                model.showNav.toggle()
+                uiViewModel.showTab.toggle()
+                uiViewModel.showNav.toggle()
             }
         }
         .overlay(NavigationBar(title: NavigationTitle.home.rawValue, contentHasScrolled: $contentHasScrolled))
     }
 
+    var list: some View {
+        LazyVStack(spacing: 20) {
+            meal.frame(height: 300)
+        }
+    }
+
+    var dummyList: some View {
+        LazyVStack(spacing: 20) {
+            ForEach(homeViewModel.featuredMeals) { _ in
+                Rectangle()
+                    .fill(.white)
+                    .frame(height: 300)
+                    .cornerRadius(30)
+                    .shadow(color: Color("Shadow").opacity(0.2), radius: 20, x: 0, y: 10)
+                    .opacity(0.3)
+            }
+        }
+    }
+
     var detail: some View {
-        ForEach(meals) { meal in
-            if meal.id == model.selectedMeal {
-                MealView(namespace: namespace, meal: meal)
+        ForEach(homeViewModel.meals) { meal in
+            if meal.id == homeViewModel.selectedMeal {
+                MealView(namespace: namespace, meal: meal, showDetail: $homeViewModel.showDetail) {
+                    homeViewModel.selectedMeal = Meal.notFoundId
+                }
             }
         }
     }
 
     var meal: some View {
-        ForEach(meals) { meal in
-            MealItem(namespace: namespace, meal: meal)
+        ForEach(homeViewModel.meals) { meal in
+            MealItem(namespace: namespace, meal: meal, selectedMeal: $homeViewModel.selectedMeal, showDetail: $homeViewModel.showDetail)
         }
     }
 
     var featured: some View {
         TabView {
-            ForEach(featuredMeals) { meal in
+            ForEach(homeViewModel.featuredMeals) { meal in
                 GeometryReader { reader in
                     FeaturedMeal(meal: meal)
                         .rotation3DEffect(
@@ -123,8 +135,8 @@ struct HomeView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .frame(height: 460)
-        .fullScreenCover(item: $selectedFeatureMeal) {
-            MealView(namespace: namespace, meal: $0)
+        .fullScreenCover(item: $selectedFeatureMeal) { meal in
+            MealView(namespace: namespace, meal: meal, showDetail: $homeViewModel.showDetail)
         }
     }
 
@@ -147,8 +159,8 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
-            .environmentObject(UIModel())
+        HomeView(homeViewModel: HomeViewModel(networkService: .mock))
+            .environmentObject(UIViewModel())
     }
 }
 
