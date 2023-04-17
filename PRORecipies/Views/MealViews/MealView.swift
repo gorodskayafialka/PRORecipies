@@ -104,16 +104,11 @@ struct MealView: View {
     }
 
     var banner: some View {
-        CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
-            if let image = phase.image {
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .matchedGeometryEffect(id: "image\(meal)", in: namespace)
-            } else {
-                ProgressView()
-                    .offset(y: -30)
-            }
+        CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .matchedGeometryEffect(id: "image\(meal)", in: namespace)
         }, placeholder: {
             ProgressView()
                 .offset(y: -30)
