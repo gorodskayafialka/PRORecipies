@@ -52,7 +52,7 @@ extension Tab {
     }
 
     private var color: Color {
-        Color.gray
+        Color.yellow
     }
 
     private var selection: Tab {

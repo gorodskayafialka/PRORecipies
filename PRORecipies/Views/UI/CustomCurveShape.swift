@@ -21,15 +21,15 @@ struct CustomCurveShape: Shape {
             path.addLine(to: CGPoint(x: rect.width, y: rect.height))
             path.addLine(to: CGPoint(x: 0, y: rect.height))
 
-            let center = xAxis + 15
+            let center = xAxis + 20
             path.move(to: CGPoint(x: center - 55, y: 0))
 
-            let to1 = CGPoint(x: center, y: -25)
+            let to1 = CGPoint(x: center, y: -30)
             let control1 = CGPoint(x: center - 35, y: 0)
-            let control2 = CGPoint(x: center - 35, y: -25)
+            let control2 = CGPoint(x: center - 35, y: -30)
 
             let to2 = CGPoint(x: center + 55, y: 0)
-            let control3 = CGPoint(x: center + 35, y: -25)
+            let control3 = CGPoint(x: center + 35, y: -30)
             let control4 = CGPoint(x: center + 35, y: 0)
 
             path.addCurve(to: to1, control1: control1, control2: control2)
