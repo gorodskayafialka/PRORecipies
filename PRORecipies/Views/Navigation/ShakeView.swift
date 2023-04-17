@@ -19,7 +19,7 @@ struct ShakeView: View {
                     .padding(.bottom, 80)
             }
         }
-        .onAppeared {
+        .onAppearedOnce {
             viewModel.fetchMealDetail()
         }
         .onShake {

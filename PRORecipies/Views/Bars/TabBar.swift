@@ -30,7 +30,7 @@ struct TabBar: View {
                     .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[0])
-                ExploreView()
+                SearchView(searchViewModel: viewModels.search)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[1])
                 ShakeView(viewModel: viewModels.shake)
@@ -112,10 +112,12 @@ fileprivate class TabBarViewModels {
     let shake: ShakeViewModel
     let favourite: FavouritesViewModel
     let home: HomeViewModel
+    let search: SearchViewModel
 
     init(networkService: NetworkService) {
         self.shake = ShakeViewModel(networkService: networkService)
         self.favourite = FavouritesViewModel(networkService: networkService)
         self.home = HomeViewModel(networkService: networkService)
+        self.search = SearchViewModel(networkService: networkService)
     }
 }
