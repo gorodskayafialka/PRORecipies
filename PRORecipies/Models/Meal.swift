@@ -27,6 +27,8 @@ struct Meal: Identifiable {
     let ingredients: [Ingredient]? // Ingredient(strIngredient, strMeasure)
 }
 
+extension Meal: Equatable {}
+
 extension Meal: Decodable {
     private enum RequiredCodingKeys: String, CodingKey, CaseIterable {
         case strMeal
