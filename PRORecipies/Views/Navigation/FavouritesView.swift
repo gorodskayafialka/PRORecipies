@@ -42,7 +42,7 @@ struct FavoritesView: View {
             }
             .coordinateSpace(name: "scroll")
         }
-        .onAppear{
+        .onAppear {
             favouritesViewModel.fetchFavouritesMeals()
         }
         .onChange(of: favouritesViewModel.showDetail) { _ in
