@@ -71,7 +71,7 @@ struct TabBar: View {
                             .offset(
                                 x: selectedTab == tabItem ?
                                 (reader.frame(in: .global).minX - reader.frame(in: .global).midX) : 0,
-                                y: selectedTab == tabItem ? -45 : 0)
+                                y: selectedTab == tabItem ? -30 : 0)
                     }
                     .onAppear {
                         if tabItem == tabItems.first {

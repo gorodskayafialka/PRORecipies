@@ -9,6 +9,10 @@ import SwiftUI
 
 struct CustomCurveShape: Shape {
     var xAxis: CGFloat
+    var animatableData: CGFloat {
+        get { return xAxis }
+        set { xAxis = newValue }
+    }
 
     func path(in rect: CGRect) -> Path {
         return Path { path in
@@ -20,12 +24,12 @@ struct CustomCurveShape: Shape {
             let center = xAxis + 15
             path.move(to: CGPoint(x: center - 55, y: 0))
 
-            let to1 = CGPoint(x: center, y: -35)
+            let to1 = CGPoint(x: center, y: -25)
             let control1 = CGPoint(x: center - 35, y: 0)
-            let control2 = CGPoint(x: center - 35, y: -35)
+            let control2 = CGPoint(x: center - 35, y: -25)
 
             let to2 = CGPoint(x: center + 55, y: 0)
-            let control3 = CGPoint(x: center + 35, y: -35)
+            let control3 = CGPoint(x: center + 35, y: -25)
             let control4 = CGPoint(x: center + 35, y: 0)
 
             path.addCurve(to: to1, control1: control1, control2: control2)
