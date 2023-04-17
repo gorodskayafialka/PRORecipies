@@ -9,9 +9,11 @@ import SwiftUI
 
 struct MealView: View {
     var namespace: Namespace.ID
+    let storage = FavouritesIdsStorage(userDefaults: UserDefaults())
     @Binding var meal: Meal
     @State var viewStateSize: CGSize = .zero
     @State var appear = false
+    @State var isFavourite = false
     @EnvironmentObject var model: UIModel
 
     @Environment(\.dismiss) var dismiss
@@ -29,7 +31,10 @@ struct MealView: View {
             .mask(RoundedRectangle(cornerRadius: appear ? 0 : 30))
             .background(.ultraThinMaterial)
             .ignoresSafeArea()
-            closeButton
+            HStack{
+                heartButton
+                closeButton
+            }
         }
         .zIndex(1)
         .onAppear { fadeIn() }
@@ -46,6 +51,22 @@ struct MealView: View {
         }
         .padding(30)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+        .offset(y: model.showDetail ? 50 : 0)
+    }
+
+    var heartButton: some View {
+        Button {
+            if isFavourite {
+                storage.deleteFavouriteFoodsIds(meal.id)
+            } else {
+                storage.addFavouriteFoodId(meal.id)
+            }
+            isFavourite.toggle()
+        } label: {
+            HeartButton(isFavourite: $isFavourite)
+        }
+        .padding(30)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .offset(y: model.showDetail ? 50 : 0)
     }
 
