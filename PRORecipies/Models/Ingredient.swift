@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ingredient {
+struct Ingredient: Equatable {
     let name: String
     let measure: String?
 }

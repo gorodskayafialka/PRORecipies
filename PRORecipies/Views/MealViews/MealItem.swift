@@ -8,15 +8,11 @@
 import SwiftUI
 
 struct MealItem: View {
-
     var namespace: Namespace.ID
     var meal: Meal
-    @Binding var selectedMeal: String
-    @Binding var showDetail: Bool
 
     var body: some View {
         VStack {
-
             Spacer()
 
             VStack(alignment: .leading, spacing: 8) {
@@ -68,12 +64,6 @@ struct MealItem: View {
             RoundedRectangle(cornerRadius: 30)
                 .matchedGeometryEffect(id: "mask\(meal)", in: namespace)
         )
-        .onTapGesture {
-            withAnimation(.openCard) {
-                showDetail = true
-                selectedMeal = meal.id
-            }
-        }
     }
 
 }
@@ -82,6 +72,9 @@ struct MealItem_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealItem(namespace: namespace, meal: Meals.dummyData1.meals[0], selectedMeal: .constant(Meals.dummyData1.meals[0].id), showDetail: .constant(false))
+        MealItem(
+            namespace: namespace,
+            meal: Meals.dummyData1.meals[0]
+        )
     }
 }

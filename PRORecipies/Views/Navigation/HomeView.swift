@@ -85,9 +85,9 @@ struct HomeView: View {
 
     var detail: some View {
         ForEach(homeViewModel.meals) { meal in
-            if meal.id == homeViewModel.selectedMeal {
+            if meal == homeViewModel.selectedMeal {
                 MealView(namespace: namespace, meal: meal, showDetail: $homeViewModel.showDetail) {
-                    homeViewModel.selectedMeal = Meal.notFoundId
+                    homeViewModel.selectedMeal = nil
                 }
             }
         }
@@ -95,7 +95,15 @@ struct HomeView: View {
 
     var meal: some View {
         ForEach(homeViewModel.meals) { meal in
-            MealItem(namespace: namespace, meal: meal, selectedMeal: $homeViewModel.selectedMeal, showDetail: $homeViewModel.showDetail)
+            MealItem(
+                namespace: namespace,
+                meal: meal
+            ).onTapGesture {
+                withAnimation(.openCard) {
+                    homeViewModel.showDetail = true
+                    homeViewModel.selectedMeal = meal
+                }
+            }
         }
     }
 

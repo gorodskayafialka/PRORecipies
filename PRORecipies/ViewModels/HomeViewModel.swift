@@ -12,7 +12,7 @@ final class HomeViewModel: ObservableObject {
     @Published private(set) var meals: [Meal] = []
 
     @Published var showDetail = false
-    @Published var selectedMeal = Meal.notFoundId
+    @Published var selectedMeal: Meal? = nil
 
     private let networkService: NetworkService
 
@@ -43,11 +43,5 @@ final class HomeViewModel: ObservableObject {
         } catch {
             return
         }
-    }
-}
-
-extension Meal {
-    static var notFoundId: String {
-        "-1"
     }
 }
