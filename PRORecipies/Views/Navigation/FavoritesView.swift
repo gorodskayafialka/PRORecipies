@@ -10,30 +10,9 @@ import SwiftUI
 struct FavoritesView: View {
     @EnvironmentObject var model: UIModel
     @Namespace var namespace
-
-    @State var selectedMeal = Meals.dummyData[0]
     @State var showMeal = false
-    
-    var meals = Meals.dummyData1
-//    lazy var meals : Array<Meal> = {
-//        let arr = Array<Meal>()
-//        let storage = FavouritesIdsStorage(userDefaults: UserDefaults()).getFavouriteFoodsIds()
-//        for i in 0...storage.count {
-//            print(1)
-//        }
-//        return arr
-//    }()
-    
-//    var meals : Array<Meals> = {
-//        var arr = Array<Meals>()
-//        var backend: NetworkService
-//        let storage : Array<String> = FavouritesIdsStorage(userDefaults: UserDefaults()).getFavouriteFoodsIds()
-//        for i in 0...storage.count {
-//            arr.append(try! await backend.mealByID(storage[i]))
-//        }
-//        return arr
-//    }()
-
+    @StateObject var favouriteViewModel: FavouritesViewModel
+//    private var meals = Meals.dummyData2.meals
     var body: some View {
         ZStack {
             Color("Background")
@@ -54,6 +33,8 @@ struct FavoritesView: View {
                 }
                 .padding(.horizontal, 20)
             }
+        }.onAppear {
+            favouriteViewModel.fetchFavouritesMeals()
         }
         .onChange(of: model.showDetail) { _ in
             withAnimation {
@@ -63,16 +44,15 @@ struct FavoritesView: View {
     }
 
     var detail: some View {
-        ForEach(meals) { meal in
+        ForEach(favouriteViewModel.favouriteMeals) { meal in
             if meal.id == model.selectedMeal {
-                
-                MealView(namespace: namespace, meal: .constant(meal))
+                MealView(namespace: namespace, meal: meal)
             }
         }
     }
 
     var meal: some View {
-        ForEach(meals) { meal in
+        ForEach(favouriteViewModel.favouriteMeals) { meal in
             MealItem(namespace: namespace, meal: meal)
         }
     }
@@ -80,18 +60,7 @@ struct FavoritesView: View {
 
 struct FavouriteView_Previews: PreviewProvider {
     static var previews: some View {
-        FavoritesView().environmentObject(UIModel())
-    }
-}
-
-extension FavoritesView {
-    func loadMeals() async {
-        let network = NetworkService(
-            baseURL: URLFactory.applicationAPI,
-            dataFetcher: DataFetcher(
-                fetch: URLSession(configuration: .default, delegate: nil, delegateQueue: .main).fetchRequest)
-        )
-        
-        print(try! await network.mealByID("1"))
+        let model = FavouritesViewModel(networkService: .makeUrlSessionedService())
+        FavoritesView(favouriteViewModel: model).environmentObject(UIModel())
     }
 }

@@ -9,7 +9,8 @@ import SwiftUI
 
 public class UIModel: ObservableObject {
     @Published var showTab = true
+    @Published var showNav = true
 
     @Published var showDetail = false
-    @Published var selectedMeal = Meals.dummyData[0].id
+    @Published var selectedMeal = Meals.dummyData1.meals[0].id
 }

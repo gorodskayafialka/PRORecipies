@@ -49,10 +49,20 @@ struct MealItem: View {
             )
         }
         .background(
-            Image("Food")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .matchedGeometryEffect(id: "image\(meal)", in: namespace)
+            CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
+                if let image = phase.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .matchedGeometryEffect(id: "image\(meal)", in: namespace)
+                } else {
+                    ProgressView()
+                        .offset(y: -30)
+                }
+            }, placeholder: {
+                ProgressView()
+                    .offset(y: -30)
+            })
         )
         .mask(
             RoundedRectangle(cornerRadius: 30)
@@ -72,7 +82,7 @@ struct MealItem_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealItem(namespace: namespace, meal: Meals.dummyData[0])
+        MealItem(namespace: namespace, meal: Meals.dummyData1.meals[0])
             .environmentObject(UIModel())
     }
 }

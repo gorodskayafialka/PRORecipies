@@ -4,13 +4,12 @@
 //
 //  Created by Anvar on 12.04.2023.
 //
-
 import SwiftUI
 
 struct MealView: View {
     var namespace: Namespace.ID
-    let storage = FavouritesIdsStorage(userDefaults: UserDefaults())
-    @Binding var meal: Meal
+    private let storage = FavouritesIdsStorage(userDefaults: UserDefaults())
+    var meal: Meal
     @State var viewStateSize: CGSize = .zero
     @State var appear = false
     @State var isFavourite = false
@@ -53,7 +52,7 @@ struct MealView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         .offset(y: model.showDetail ? 50 : 0)
     }
-
+    
     var heartButton: some View {
         Button {
             if isFavourite {
@@ -61,6 +60,8 @@ struct MealView: View {
             } else {
                 storage.addFavouriteFoodId(meal.id)
             }
+            print(meal.id)
+            print(isFavourite ? "delete" : "add")
             isFavourite.toggle()
         } label: {
             HeartButton(isFavourite: $isFavourite)
@@ -103,10 +104,21 @@ struct MealView: View {
     }
 
     var banner: some View {
-        Image("Food")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .matchedGeometryEffect(id: "image\(meal)", in: namespace)
+        CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
+            if let image = phase.image {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .matchedGeometryEffect(id: "image\(meal)", in: namespace)
+            } else {
+                ProgressView()
+                    .offset(y: -30)
+            }
+        }, placeholder: {
+            ProgressView()
+                .offset(y: -30)
+        })
+
     }
 
     var card: some View {
@@ -178,7 +190,7 @@ struct MealView: View {
         }
         withAnimation(.closeCard.delay(0.2)) {
             model.showDetail = false
-            model.selectedMeal = Meals.dummyData[0].id
+            model.selectedMeal = Meals.dummyData1.meals[0].id
         }
     }
 
@@ -201,7 +213,7 @@ struct MealView_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealView(namespace: namespace, meal: .constant(Meals.dummyData[0]))
+        MealView(namespace: namespace, meal: Meals.dummyData1.meals[0])
             .environmentObject(UIModel())
     }
 }

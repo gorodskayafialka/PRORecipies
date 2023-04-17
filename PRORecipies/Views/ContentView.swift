@@ -9,9 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("selectedTab") var selectedTab: Tab = .home
+    private var networkService: NetworkService
+
+    init() {
+        networkService = NetworkService.makeUrlSessionedService()
+    }
 
     var body: some View {
-        TabBar()
+        TabBar(networkService: networkService)
             .environmentObject(UIModel())
     }
 }

@@ -36,6 +36,6 @@ struct FeaturedMeal: View {
 
 struct FeaturedMeal_Previews: PreviewProvider {
     static var previews: some View {
-        FeaturedMeal(meal: Meals.dummyData[0])
+        FeaturedMeal(meal: Meals.dummyData1.meals[0])
     }
 }

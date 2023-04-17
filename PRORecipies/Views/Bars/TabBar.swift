@@ -13,8 +13,10 @@ struct TabBar: View {
     @State var xAxis: CGFloat = 0
     @Namespace var animation
     @EnvironmentObject var model: UIModel
+    private let networkService: NetworkService
 
-    init() {
+    init(networkService: NetworkService) {
+        self.networkService = networkService
         UITabBar.appearance().isHidden = true
         tabItems = Tab.allCases.map { $0.tabItem }
     }
@@ -29,7 +31,7 @@ struct TabBar: View {
                 ExploreView()
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[1])
-                FavoritesView()
+                FavoritesView(favouriteViewModel: FavouritesViewModel(networkService: networkService))
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[2])
                 ListView()
@@ -94,7 +96,7 @@ struct TabBar: View {
 
 struct TabBar_Previews: PreviewProvider {
     static var previews: some View {
-        TabBar()
+        TabBar(networkService: .mock)
             .environmentObject(UIModel())
     }
 }
