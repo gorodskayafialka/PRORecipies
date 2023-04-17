@@ -2,7 +2,7 @@
 //  FavouritesView.swift
 //  PRORecipies
 //
-//  Created by Anvar on 11.04.2023.
+//  Created by DenchicEz on 11.04.2023.
 //
 import SwiftUI
 

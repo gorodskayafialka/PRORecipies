@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MealView: View {
     var namespace: Namespace.ID
-    private let storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: UserDefaults()))
+    private let storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: .standard))
     var meal: Meal
     @State var viewStateSize: CGSize = .zero
     @State var appear = false
