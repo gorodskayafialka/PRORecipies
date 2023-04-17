@@ -8,11 +8,11 @@
 import Foundation
 
 final class FavouritesIdsStorage {
-    private let storage: PersistentStorage
+    private let storage: KeyValueStorage
     private let keyStorage = "favourites"
 
-    init(userDefaults: UserDefaults){
-        self.storage = PersistentStorage(userDefaults: userDefaults)
+    init(storage: KeyValueStorage){
+        self.storage = storage
     }
 
     func addFavouriteFoodId(_ favouriteFoodId: String) {
@@ -31,7 +31,7 @@ final class FavouritesIdsStorage {
 
 }
 
-extension PersistentStorage {
+extension KeyValueStorage {
     fileprivate func addArray(_ value: String, forKey key: String) {
         var arr: Array<String> = self.value(forKey: key, default: [])
         arr.append(value)
