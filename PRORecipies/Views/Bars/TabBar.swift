@@ -63,15 +63,14 @@ struct TabBar: View {
                             .resizable()
                             .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 25, height: 25)
+                            .frame(width: 35, height: 35)
                             .foregroundColor(selectedTab == tabItem ? tabItem.color : Color("tabbarItem"))
                             .padding(selectedTab == tabItem ? 15 : 0)
-                            .background(Color("tabbarItem").opacity(selectedTab == tabItem ? 0.9 : 0), in: Circle())
                             .matchedGeometryEffect(id: tabItem, in: animation)
                             .offset(
                                 x: selectedTab == tabItem ?
                                 (reader.frame(in: .global).minX - reader.frame(in: .global).midX) : 0,
-                                y: selectedTab == tabItem ? -30 : 0)
+                                y: selectedTab == tabItem ? -35 : 0)
                     }
                     .onAppear {
                         if tabItem == tabItems.first {
