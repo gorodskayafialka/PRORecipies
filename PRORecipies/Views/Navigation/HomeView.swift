@@ -52,7 +52,7 @@ struct HomeView: View {
             }
             .coordinateSpace(name: "scroll")
         }
-        .onAppeared() {
+        .onAppearedOnce() {
             homeViewModel.fetchMeals()
         }
         .onChange(of: homeViewModel.showDetail) { _ in
@@ -66,7 +66,10 @@ struct HomeView: View {
 
     var list: some View {
         LazyVStack(spacing: 20) {
-            meal.frame(height: 300)
+            ForEach(homeViewModel.meals) { meal in
+                MealItem(namespace: namespace, meal: meal)
+            }
+            .frame(height: 300)
         }
     }
 

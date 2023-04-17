@@ -113,7 +113,6 @@ struct MealView: View {
             ProgressView()
                 .offset(y: -30)
         })
-
     }
 
     var card: some View {

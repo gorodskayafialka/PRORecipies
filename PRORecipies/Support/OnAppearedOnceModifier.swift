@@ -1,5 +1,5 @@
 //
-//  onAppeared.swift
+//  OnAppearedOnceModifier.swift
 //  PRORecipies
 //
 //  Created by Anvar on 17.04.2023.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func onAppeared(_ action: @escaping () -> ()) -> some View {
+    func onAppearedOnce(_ action: @escaping () -> ()) -> some View {
         self.modifier(OnAppearedModifier(action: action))
     }
 }
