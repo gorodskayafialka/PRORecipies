@@ -89,9 +89,9 @@ struct TabBar: View {
         .frame(height: 40)
         .padding(.vertical, 10)
         .padding(.horizontal, 50)
-        .background(Color("tabbar"))
+        .background(.white)
         .background(
-            Color("tabbar").clipShape(CustomCurveShape(xAxis: xAxis))
+            Color.white.clipShape(CustomCurveShape(xAxis: xAxis))
         )
     }
 }
