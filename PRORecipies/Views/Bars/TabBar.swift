@@ -37,7 +37,7 @@ struct TabBar: View {
                     .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[2])
-                FavoritesView(favouritesViewModel: FavouritesViewModel(networkService: networkService))
+                FavoritesView(favouritesViewModel: viewModels.favourite)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[3])
                 ListView()
@@ -110,10 +110,12 @@ struct TabBar_Previews: PreviewProvider {
 
 fileprivate class TabBarViewModels {
     let shake: ShakeViewModel
+    let favourite: FavouritesViewModel
     let home: HomeViewModel
 
     init(networkService: NetworkService) {
         self.shake = ShakeViewModel(networkService: networkService)
+        self.favourite = FavouritesViewModel(networkService: networkService)
         self.home = HomeViewModel(networkService: networkService)
     }
 }
