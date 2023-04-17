@@ -58,16 +58,15 @@ struct TabBar: View {
                             selectedTab = tabItem
                             xAxis = reader.frame(in: .global).minX
                         }
-                    }
-                    ) {
+                    }) {
                         Image(systemName: tabItem.icon)
                             .resizable()
                             .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 25, height: 25)
-                            .foregroundColor(selectedTab == tabItem ? tabItem.color : Color.gray)
+                            .foregroundColor(selectedTab == tabItem ? tabItem.color : Color("tabbarItem"))
                             .padding(selectedTab == tabItem ? 15 : 0)
-                            .background(Color("Shadow").opacity(selectedTab == tabItem ? 0.7 : 0), in: Circle())
+                            .background(Color("tabbarItem").opacity(selectedTab == tabItem ? 0.9 : 0), in: Circle())
                             .matchedGeometryEffect(id: tabItem, in: animation)
                             .offset(
                                 x: selectedTab == tabItem ?
@@ -90,7 +89,10 @@ struct TabBar: View {
         .frame(height: 40)
         .padding(.vertical, 10)
         .padding(.horizontal, 50)
-        .background(.ultraThinMaterial)
+        .background(Color("tabbar"))
+        .background(
+            Color("tabbar").clipShape(CustomCurveShape(xAxis: xAxis))
+        )
     }
 }
 

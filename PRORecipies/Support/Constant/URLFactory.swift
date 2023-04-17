@@ -8,7 +8,7 @@
 import Foundation
 
 enum URLFactory {
-    public static var applicationAPI: URL{
+    public static var applicationAPI: URL {
         URL(string: baseURL + "\(apiKey)/")!
     }
 
