@@ -10,6 +10,7 @@ import Foundation
 enum Icons: String {
     case home = "house.circle.fill"
     case magnifyingglass = "magnifyingglass.circle.fill"
+    case shake = "hand.raised.fingers.spread"
     case heart = "heart.circle.fill"
     case list = "list.bullet.circle.fill"
 }
