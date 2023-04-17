@@ -8,7 +8,6 @@
 import Foundation
 
 final class FavouritesViewModel: ObservableObject {
-    @Published var showDetail = false
     @Published private(set) var favouriteMeals: [Meal] = []
     @Published var selectedMeal: Meal? = nil
 

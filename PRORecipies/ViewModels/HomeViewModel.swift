@@ -11,9 +11,6 @@ final class HomeViewModel: ObservableObject {
     @Published private(set) var featuredMeals: [Meal] = []
     @Published private(set) var meals: [Meal] = []
 
-    @Published var showDetail = false
-    @Published var selectedMeal: Meal? = nil
-
     private let networkService: NetworkService
 
     init(networkService: NetworkService) {

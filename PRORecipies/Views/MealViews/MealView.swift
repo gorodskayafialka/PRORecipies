@@ -8,16 +8,24 @@
 import SwiftUI
 
 struct MealView: View {
+    typealias Action = () -> ()
+
+    enum CloseAction {
+        case dismiss
+        case closeWithAction(Action)
+    }
+
     var namespace: Namespace.ID
-    private let storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: .standard))
     var meal: Meal
-    @State var viewStateSize: CGSize = .zero
-    @State var appear = false
-    @Binding var showDetail: Bool
-    @State var isFavourite = false
-    var onClose: (() -> ())? = nil
+
+    @State private var appear = false
+    @State private var isFavourite = false
+    @State private var viewStateSize: CGSize = .zero
+    private let storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: .standard))
 
     @Environment(\.dismiss) var dismiss
+
+    private let closeAction: CloseAction
 
     var body: some View {
         ZStack {
@@ -31,28 +39,26 @@ struct MealView: View {
             .background(Color("Background"))
             .mask(RoundedRectangle(cornerRadius: appear ? 0 : 30))
             .background(.ultraThinMaterial)
-            .ignoresSafeArea()
-            HStack{
+
+            HStack {
                 heartButton
                 closeButton
             }
+            .offset(y: 50)
+            .padding(30)
         }
+        .ignoresSafeArea()
         .zIndex(1)
         .onAppear { fadeIn() }
-        .onChange(of: showDetail) { _ in
-           fadeOut()
-        }
     }
 
     var closeButton: some View {
         Button {
-            showDetail ? close() : dismiss()
+            closeAction.isCustom ? close() : dismiss()
         } label: {
             CloseButton()
         }
-        .padding(30)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-        .offset(y: showDetail ? 50 : 0)
     }
 
     var heartButton: some View {
@@ -66,9 +72,7 @@ struct MealView: View {
         } label: {
             HeartButton(isFavourite: $isFavourite)
         }
-        .padding(30)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .offset(y: showDetail ? 50 : 0)
     }
 
     var cover: some View {
@@ -180,29 +184,68 @@ struct MealView: View {
     func close() {
         withAnimation {
             viewStateSize = .zero
-
         }
         withAnimation(.closeCard.delay(0.2)) {
-            showDetail = false
-            guard let onClose = onClose else { return }
-            onClose()
+            closeBlock()
         }
     }
 
     func fadeIn() {
         withAnimation(.easeOut.delay(0.3)) {
             appear = true
-
         }
     }
 
     func fadeOut() {
         withAnimation(.easeIn(duration: 0.1)) {
             appear = false
-
         }
     }
 }
+
+extension MealView {
+    init(
+        namespace: Namespace.ID,
+        meal: Meal,
+        onClose: @escaping Action
+    ){
+        self.namespace = namespace
+        self.meal = meal
+        self.closeAction = .closeWithAction(onClose)
+    }
+
+    init(
+        namespace: Namespace.ID,
+        meal: Meal
+    ){
+        self.namespace = namespace
+        self.meal = meal
+        self.closeAction = .dismiss
+    }
+}
+
+extension MealView {
+    var closeBlock: Action {
+        switch closeAction {
+        case .dismiss:
+            return { dismiss() }
+        case.closeWithAction(let action):
+            return action
+        }
+    }
+}
+
+extension MealView.CloseAction {
+    fileprivate var isCustom: Bool {
+        switch self {
+        case .closeWithAction:
+            return true
+        case .dismiss:
+            return false
+        }
+    }
+}
+
 
 struct MealView_Previews: PreviewProvider {
     @Namespace static var namespace
@@ -211,7 +254,6 @@ struct MealView_Previews: PreviewProvider {
         MealView(
             namespace: namespace,
             meal: Meals.dummyData1.meals[0],
-            showDetail: .constant(true),
             onClose: { }
         )
     }

@@ -51,7 +51,7 @@ struct SearchView: View {
                     }
             }
             .fullScreenCover(item: $searchViewModel.selectedMeal) { meal in
-                MealView(namespace: namespace, meal: meal, showDetail: .constant(false))
+                MealView(namespace: namespace, meal: meal)
             }
 
             Rectangle()

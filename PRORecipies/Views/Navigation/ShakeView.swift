@@ -15,7 +15,7 @@ struct ShakeView: View {
         ZStack {
             Color("Background").ignoresSafeArea()
             if let meal = viewModel.meal {
-                MealView(namespace: namespace, meal: meal, showDetail: .constant(false))
+                MealView(namespace: namespace, meal: meal)
                     .padding(.bottom, 80)
             }
         }
