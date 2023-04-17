@@ -60,7 +60,7 @@ struct MealView: View {
             if isFavourite {
                 storage.deleteFavouriteFoodsIds(meal.id)
             } else {
-                storage.addFavouriteFoodId(meal.id)
+                storage.addToFavourite(meal.id)
             }
             isFavourite.toggle()
         } label: {
