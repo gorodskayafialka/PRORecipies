@@ -75,7 +75,7 @@ struct FavoritesView: View {
             MealItem(namespace: namespace, meal: meal, selectedMeal: $favouritesViewModel.selectedMeal, showDetail: $favouritesViewModel.showDetail)
         }
     }
-    
+
     var scrollDetection: some View {
         GeometryReader { proxy in
             let offset = proxy.frame(in: .named("scroll")).minY
