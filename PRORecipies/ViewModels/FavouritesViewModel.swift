@@ -13,7 +13,7 @@ final class FavouritesViewModel: ObservableObject {
     @Published var selectedMeal = Meal.notFoundId
 
 
-    private let storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: UserDefaults()))
+    private let storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: .standard))
     private let networkService: NetworkService
 
     init(networkService: NetworkService) {
