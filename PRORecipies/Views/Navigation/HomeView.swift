@@ -68,8 +68,14 @@ struct HomeView: View {
         LazyVStack(spacing: 20) {
             ForEach(homeViewModel.meals) { meal in
                 MealItem(namespace: namespace, meal: meal)
+                    .frame(height: 300)
+                    .onTapGesture {
+                        withAnimation(.openCard) {
+                            homeViewModel.showDetail = true
+                            homeViewModel.selectedMeal = meal
+                        }
+                    }
             }
-            .frame(height: 300)
         }
     }
 
@@ -91,20 +97,6 @@ struct HomeView: View {
             if meal == homeViewModel.selectedMeal {
                 MealView(namespace: namespace, meal: meal, showDetail: $homeViewModel.showDetail) {
                     homeViewModel.selectedMeal = nil
-                }
-            }
-        }
-    }
-
-    var meal: some View {
-        ForEach(homeViewModel.meals) { meal in
-            MealItem(
-                namespace: namespace,
-                meal: meal
-            ).onTapGesture {
-                withAnimation(.openCard) {
-                    homeViewModel.showDetail = true
-                    homeViewModel.selectedMeal = meal
                 }
             }
         }
