@@ -37,7 +37,7 @@ struct TabBar: View {
                     .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[2])
-                FavoritesView(favouritesViewModel: viewModels.favourite)
+                FavoritesView(viewModel: viewModels.favourite)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[3])
                 ListView()

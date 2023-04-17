@@ -8,17 +8,16 @@ import SwiftUI
 
 struct FavoritesView: View {
     @EnvironmentObject var uiViewModel: UIViewModel
-    @StateObject var favouritesViewModel: FavouritesViewModel
+    @StateObject var viewModel: FavouritesViewModel
     @Namespace var namespace
 
     @State private var contentHasScrolled = false
-
 
     var body: some View {
         ZStack {
             Color("Background")
 
-            if favouritesViewModel.showDetail {
+            if viewModel.showDetail {
                 detail
             }
 
@@ -43,9 +42,9 @@ struct FavoritesView: View {
             .coordinateSpace(name: "scroll")
         }
         .onAppear {
-            favouritesViewModel.fetchFavouritesMeals()
+            viewModel.fetchFavouritesMeals()
         }
-        .onChange(of: favouritesViewModel.showDetail) { _ in
+        .onChange(of: viewModel.showDetail) { _ in
             withAnimation {
                 uiViewModel.showTab.toggle()
                 uiViewModel.showNav.toggle()
@@ -61,18 +60,24 @@ struct FavoritesView: View {
     }
 
     var detail: some View {
-        ForEach(favouritesViewModel.favouriteMeals) { meal in
-            if meal.id == favouritesViewModel.selectedMeal {
-                MealView(namespace: namespace, meal: meal, showDetail: $favouritesViewModel.showDetail) {
-                    favouritesViewModel.selectedMeal = Meal.notFoundId
+        ForEach(viewModel.favouriteMeals) { meal in
+            if meal == viewModel.selectedMeal {
+                MealView(namespace: namespace, meal: meal, showDetail: $viewModel.showDetail) {
+                    viewModel.selectedMeal = nil
                 }
             }
         }
     }
 
     var meal: some View {
-        ForEach(favouritesViewModel.favouriteMeals) { meal in
-            MealItem(namespace: namespace, meal: meal, selectedMeal: $favouritesViewModel.selectedMeal, showDetail: $favouritesViewModel.showDetail)
+        ForEach(viewModel.favouriteMeals) { meal in
+            MealItem(namespace: namespace, meal: meal)
+                .onTapGesture {
+                    withAnimation(.openCard) {
+                        viewModel.showDetail = true
+                        viewModel.selectedMeal = meal
+                    }
+                }
         }
     }
 
@@ -95,7 +100,7 @@ struct FavoritesView: View {
 
 struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
-        FavoritesView(favouritesViewModel: FavouritesViewModel(networkService: .mock))
+        FavoritesView(viewModel: FavouritesViewModel(networkService: .mock))
             .environmentObject(UIViewModel())
     }
 }
