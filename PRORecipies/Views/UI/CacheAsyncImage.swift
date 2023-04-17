@@ -13,45 +13,41 @@ struct CacheAsyncImage<Content, Placeholder: View>: View where Content: View {
     private let url: URL?
     private let scale: CGFloat
     private let transaction: Transaction
-    private let content: (AsyncImagePhase) -> Content
-    private let placeholder: Placeholder
+    private let content: (Image) -> Content
+    private let placeholder: () -> Placeholder
 
     init(
         url: URL?,
         scale: CGFloat = 1.0,
         transaction: Transaction = Transaction(),
-        @ViewBuilder content: @escaping (AsyncImagePhase) -> Content,
+        @ViewBuilder content: @escaping (Image) -> Content,
         @ViewBuilder placeholder: @escaping () -> Placeholder
     ) {
         self.url = url
         self.scale = scale
         self.transaction = transaction
         self.content = content
-        self.placeholder = placeholder()
+        self.placeholder = placeholder
     }
 
     var body: some View {
         if let url {
             if let cached = cache.getImage(for: url) {
-                content(.success(cached))
+                content(cached)
             } else {
                 AsyncImage(
                     url: url,
-                    scale: scale,
-                    transaction: transaction
-                ) { phase in
-                    cacheAndRender(phase: phase, url: url)
-                }
+                    content: { cacheAndRender(image: $0, for: url) },
+                    placeholder: { placeholder() }
+                )
             }
         } else {
-            placeholder
+            placeholder()
         }
     }
 
-    func cacheAndRender(phase: AsyncImagePhase, url: URL) -> some View {
-        if case .success(let image) = phase {
-            cache.setImage(image: image, for: url)
-        }
-        return content(phase)
+    func cacheAndRender(image: Image, for url: URL) -> some View {
+        cache.setImage(image: image, for: url)
+        return content(image)
     }
 }

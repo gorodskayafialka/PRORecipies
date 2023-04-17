@@ -111,17 +111,13 @@ struct HomeView: View {
                         .shadow(radius: 20, x: 0, y: 20)
                         .blur(radius: abs(reader.frame(in: .global).minX) / 40)
                         .overlay(
-                            CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
-                                if let image = phase.image {
-                                    image.resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(height: 200)
-                                        .cornerRadius(30)
-                                        .padding(.horizontal, 15)
-                                        .offset(x: reader.frame(in: .global).minX / 2, y: -60)
-                                } else {
-                                    ProgressView().offset(y: -30)
-                                }
+                            CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { image in
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(height: 200)
+                                    .cornerRadius(30)
+                                    .padding(.horizontal, 15)
+                                    .offset(x: reader.frame(in: .global).minX / 2, y: -60)
                             }, placeholder: {
                                     ProgressView().offset(y: -30)
                             })
