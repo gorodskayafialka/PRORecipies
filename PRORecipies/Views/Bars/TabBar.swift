@@ -14,9 +14,11 @@ struct TabBar: View {
     @Namespace var animation
     @EnvironmentObject var uiViewModel: UIViewModel
     private let networkService: NetworkService
+    private let viewModels: TabBarViewModels
 
     init(networkService: NetworkService) {
         self.networkService = networkService
+        self.viewModels = TabBarViewModels(networkService: networkService)
         UITabBar.appearance().isHidden = true
         tabItems = Tab.allCases.map { $0.tabItem }
     }
@@ -24,19 +26,23 @@ struct TabBar: View {
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
             TabView(selection: $selectedTab) {
-                HomeView(homeViewModel: HomeViewModel(networkService: networkService))
+                HomeView(homeViewModel: viewModels.home)
                     .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[0])
                 ExploreView()
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[1])
-                FavoritesView()
+                ShakeView(viewModel: viewModels.shake)
+                    .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[2])
-                ListView()
+                FavoritesView()
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[3])
+                ListView()
+                    .ignoresSafeArea(.all, edges: .all)
+                    .tag(tabItems[4])
             }
 
             customTabs
@@ -100,5 +106,15 @@ struct TabBar_Previews: PreviewProvider {
     static var previews: some View {
         TabBar(networkService: .mock)
             .environmentObject(UIViewModel())
+    }
+}
+
+fileprivate class TabBarViewModels {
+    let shake: ShakeViewModel
+    let home: HomeViewModel
+
+    init(networkService: NetworkService) {
+        self.shake = ShakeViewModel(networkService: networkService)
+        self.home = HomeViewModel(networkService: networkService)
     }
 }
