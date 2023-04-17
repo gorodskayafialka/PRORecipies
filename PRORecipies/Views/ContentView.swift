@@ -17,7 +17,7 @@ struct ContentView: View {
 
     var body: some View {
         TabBar(networkService: networkService)
-            .environmentObject(UIModel())
+            .environmentObject(UIViewModel())
     }
 }
 

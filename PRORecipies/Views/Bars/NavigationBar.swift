@@ -10,7 +10,7 @@ import SwiftUI
 struct NavigationBar: View {
     var title = ""
     @Binding var contentHasScrolled: Bool
-    @EnvironmentObject var model: UIModel
+    @EnvironmentObject var uiViewModel: UIViewModel
 
     var body: some View {
         ZStack {
@@ -31,8 +31,8 @@ struct NavigationBar: View {
                 .padding(.top, 64)
                 .opacity(contentHasScrolled ? 0.7 : 1)
         }
-        .offset(y: model.showNav ? 0 : -120)
-        .accessibility(hidden: !model.showNav)
+        .offset(y: uiViewModel.showNav ? 0 : -120)
+        .accessibility(hidden: !uiViewModel.showNav)
         .offset(y: contentHasScrolled ? -16 : 0)
     }
 }
@@ -40,6 +40,6 @@ struct NavigationBar: View {
 struct NavigationBar_Previews: PreviewProvider {
     static var previews: some View {
         NavigationBar(contentHasScrolled: .constant(false))
-            .environmentObject(UIModel())
+            .environmentObject(UIViewModel())
     }
 }

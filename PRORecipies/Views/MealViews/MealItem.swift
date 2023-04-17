@@ -11,8 +11,8 @@ struct MealItem: View {
 
     var namespace: Namespace.ID
     var meal: Meal
-
-    @EnvironmentObject var model: UIModel
+    @Binding var selectedMeal: String
+    @Binding var showDetail: Bool
 
     var body: some View {
         VStack {
@@ -70,8 +70,8 @@ struct MealItem: View {
         )
         .onTapGesture {
             withAnimation(.openCard) {
-                model.showDetail = true
-                model.selectedMeal = meal.id
+                showDetail = true
+                selectedMeal = meal.id
             }
         }
     }
@@ -82,7 +82,6 @@ struct MealItem_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealItem(namespace: namespace, meal: Meals.dummyData1.meals[0])
-            .environmentObject(UIModel())
+        MealItem(namespace: namespace, meal: Meals.dummyData1.meals[0], selectedMeal: .constant(Meals.dummyData1.meals[0].id), showDetail: .constant(false))
     }
 }
