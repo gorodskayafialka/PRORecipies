@@ -12,7 +12,7 @@ final class FavouritesIdsStorage {
     private let storage: KeyValueStorage
     private let keyStorage = "favourites"
 
-    init(storage: KeyValueStorage){
+    init(storage: KeyValueStorage) {
         self.storage = storage
     }
 
