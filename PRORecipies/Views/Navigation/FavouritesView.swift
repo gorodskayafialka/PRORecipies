@@ -1,5 +1,5 @@
 //
-//  FavoritesView.swift
+//  FavouritesView.swift
 //  PRORecipies
 //
 //  Created by Anvar on 11.04.2023.
@@ -12,7 +12,6 @@ struct FavoritesView: View {
     @Namespace var namespace
 
     @State private var contentHasScrolled = false
-    @State private var selectedFeatureMeal: Meal? = nil
 
 
     var body: some View {
@@ -27,12 +26,11 @@ struct FavoritesView: View {
                 scrollDetection
 
                 Rectangle()
-                    .frame(width: 100, height: 72)
+                    .frame(width: 100, height: 200)
                     .opacity(0)
 
-                featured.padding(.bottom, 20)
 
-                Text("Meals".uppercased())
+                Text("featured meals".uppercased())
                     .font(.body.weight(.semibold))
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,7 +42,7 @@ struct FavoritesView: View {
             }
             .coordinateSpace(name: "scroll")
         }
-        .onAppeared() {
+        .onAppear{
             favouritesViewModel.fetchFavouritesMeals()
         }
         .onChange(of: favouritesViewModel.showDetail) { _ in
@@ -63,7 +61,7 @@ struct FavoritesView: View {
     }
 
     var detail: some View {
-        ForEach(favouritesViewModel.meals) { meal in
+        ForEach(favouritesViewModel.favouriteMeals) { meal in
             if meal.id == favouritesViewModel.selectedMeal {
                 MealView(namespace: namespace, meal: meal, showDetail: $favouritesViewModel.showDetail) {
                     favouritesViewModel.selectedMeal = Meal.notFoundId
@@ -74,51 +72,10 @@ struct FavoritesView: View {
 
     var meal: some View {
         ForEach(favouritesViewModel.favouriteMeals) { meal in
-            MealItem(namespace: namespace, meal: meal, selectedMeal: $favouritesViewModel.selectedMeal, showDetail: $homeViewModel.showDetail)
+            MealItem(namespace: namespace, meal: meal, selectedMeal: $favouritesViewModel.selectedMeal, showDetail: $favouritesViewModel.showDetail)
         }
     }
-
-    var featured: some View {
-        TabView {
-            ForEach(favouritesViewModel.featuredMeals) { meal in
-                GeometryReader { reader in
-                    FeaturedMeal(meal: meal)
-                        .rotation3DEffect(
-                            .degrees(reader.frame(in: .global).minX / -10),
-                            axis: (x: 0, y: 1, z: 0), perspective: 1
-                        )
-                        .shadow(radius: 20, x: 0, y: 20)
-                        .blur(radius: abs(reader.frame(in: .global).minX) / 40)
-                        .overlay(
-                            CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { phase in
-                                if let image = phase.image {
-                                    image.resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(height: 200)
-                                        .cornerRadius(30)
-                                        .padding(.horizontal, 15)
-                                        .offset(x: reader.frame(in: .global).minX / 2, y: -60)
-                                } else {
-                                    ProgressView().offset(y: -30)
-                                }
-                            }, placeholder: {
-                                    ProgressView().offset(y: -30)
-                            })
-                        )
-                        .padding(20)
-                        .onTapGesture {
-                            selectedFeatureMeal = meal
-                        }
-                }
-            }
-        }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .frame(height: 460)
-        .fullScreenCover(item: $selectedFeatureMeal) { meal in
-            MealView(namespace: namespace, meal: meal, showDetail: $favouritesViewModel.showDetail)
-        }
-    }
-
+    
     var scrollDetection: some View {
         GeometryReader { proxy in
             let offset = proxy.frame(in: .named("scroll")).minY
@@ -138,7 +95,7 @@ struct FavoritesView: View {
 
 struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
-        FavoritesView(homeViewModel: FavouritesViewModel(networkService: .mock))
+        FavoritesView(favouritesViewModel: FavouritesViewModel(networkService: .mock))
             .environmentObject(UIViewModel())
     }
 }

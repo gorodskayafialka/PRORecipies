@@ -12,7 +12,7 @@ struct TabBar: View {
     @State var selectedTab = Tab.home.tabItem
     @State var xAxis: CGFloat = 0
     @Namespace var animation
-    @EnvironmentObject var model: UIModel
+    @EnvironmentObject var uiViewModel: UIViewModel
     private let networkService: NetworkService
 
     init(networkService: NetworkService) {
@@ -24,14 +24,15 @@ struct TabBar: View {
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
             TabView(selection: $selectedTab) {
-                HomeView()
-                    .environmentObject(model)
+                HomeView(homeViewModel: HomeViewModel(networkService: networkService))
+                    .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[0])
                 ExploreView()
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[1])
-                FavoritesView(favouriteViewModel: FavouritesViewModel(networkService: networkService))
+                FavoritesView(favouritesViewModel: FavouritesViewModel(networkService: networkService))
+                    .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[2])
                 ListView()
@@ -41,7 +42,7 @@ struct TabBar: View {
 
             customTabs
                 .ignoresSafeArea(.all, edges: .bottom)
-                .offset(y: model.showTab ? 0 : 200)
+                .offset(y: uiViewModel.showTab ? 0 : 200)
                 .onAppear {
                     selectedTab = tabItems.first ?? Tab.home.tabItem
                 }
@@ -58,21 +59,20 @@ struct TabBar: View {
                             selectedTab = tabItem
                             xAxis = reader.frame(in: .global).minX
                         }
-                    }
-                    ) {
+                    }) {
                         Image(systemName: tabItem.icon)
                             .resizable()
                             .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 25, height: 25)
-                            .foregroundColor(selectedTab == tabItem ? tabItem.color : Color.gray)
+                            .foregroundColor(selectedTab == tabItem ? tabItem.color : Color("tabbarItem"))
                             .padding(selectedTab == tabItem ? 15 : 0)
-                            .background(Color("Shadow").opacity(selectedTab == tabItem ? 0.7 : 0), in: Circle())
+                            .background(Color("tabbarItem").opacity(selectedTab == tabItem ? 0.9 : 0), in: Circle())
                             .matchedGeometryEffect(id: tabItem, in: animation)
                             .offset(
                                 x: selectedTab == tabItem ?
                                 (reader.frame(in: .global).minX - reader.frame(in: .global).midX) : 0,
-                                y: selectedTab == tabItem ? -45 : 0)
+                                y: selectedTab == tabItem ? -30 : 0)
                     }
                     .onAppear {
                         if tabItem == tabItems.first {
@@ -90,13 +90,16 @@ struct TabBar: View {
         .frame(height: 40)
         .padding(.vertical, 10)
         .padding(.horizontal, 50)
-        .background(.ultraThinMaterial)
+        .background(Color("tabbar"))
+        .background(
+            Color("tabbar").clipShape(CustomCurveShape(xAxis: xAxis))
+        )
     }
 }
 
 struct TabBar_Previews: PreviewProvider {
     static var previews: some View {
         TabBar(networkService: .mock)
-            .environmentObject(UIModel())
+            .environmentObject(UIViewModel())
     }
 }

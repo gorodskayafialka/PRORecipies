@@ -8,9 +8,12 @@
 import Foundation
 
 final class FavouritesViewModel: ObservableObject {
+    @Published var showDetail = false
     @Published private(set) var favouriteMeals: [Meal] = []
-    let storage = FavouritesIdsStorage(userDefaults: UserDefaults())
-
+    @Published var selectedMeal = Meal.notFoundId
+    
+    
+    private let storage = FavouritesIdsStorage(userDefaults: UserDefaults())
     private let networkService: NetworkService
 
     init(networkService: NetworkService) {
@@ -26,14 +29,16 @@ final class FavouritesViewModel: ObservableObject {
     @MainActor
     private func fetchFavourites() async {
         let mealIds = storage.getFavouriteFoodsIds()
-        favouriteMeals = []
+        var favouriteTmpMeals: [Meal] = []
         for mealId in mealIds {
             do {
-                let favouriteMeal = try await networkService.mealByID(mealId).meals
-                favouriteMeals.append(favouriteMeal[0])
+                if let favouriteMealFirst = try await networkService.mealByID(mealId).meals.first {
+                    favouriteTmpMeals.append(favouriteMealFirst)
+                }
             } catch {
                 continue
             }
         }
+        favouriteMeals = favouriteTmpMeals
     }
 }

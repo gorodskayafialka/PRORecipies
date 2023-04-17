@@ -49,7 +49,7 @@ struct CacheAsyncImage<Content, Placeholder: View>: View where Content: View {
     }
 
     func cacheAndRender(phase: AsyncImagePhase, url: URL) -> some View {
-        if case .success (let image) = phase {
+        if case .success(let image) = phase {
             cache.setImage(image: image, for: url)
         }
         return content(phase)
