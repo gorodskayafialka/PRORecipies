@@ -11,6 +11,7 @@ struct SearchView: View {
     @Namespace var namespace
     @StateObject var searchViewModel: SearchViewModel
     @State var searchText: String = ""
+    @State var contentHasScrolled: Bool = false
 
     var body: some View {
         ZStack {
@@ -18,19 +19,21 @@ struct SearchView: View {
                 .ignoresSafeArea()
 
             VStack {
-                Text(NavigationTitle.search.rawValue)
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundStyle(.primary)
-                    .frame(maxWidth: .infinity, maxHeight: 40, alignment: .topLeading)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 64)
-
-                SearchBar(text: $searchText)
+                Rectangle()
+                    .frame(width: 100, height: 70)
+                    .opacity(0)
 
                 ScrollView {
+                    SearchBar(text: $searchText)
+                        .offset(y: contentHasScrolled ? -100 : 20)
+                        .padding(.top, 20)
+
+                    scrollDetection
+
                     list
                 }
             }
+            .overlay(NavigationBar(title: NavigationTitle.search.rawValue, contentHasScrolled: $contentHasScrolled))
         }
         .onAppearedOnce {
             searchViewModel.fetchSearchedMeals()
@@ -58,6 +61,22 @@ struct SearchView: View {
         .onChange(of: searchText) { _ in
             withAnimation {
                 searchViewModel.fetchSearchedMeals(for: searchText)
+            }
+        }
+    }
+
+    var scrollDetection: some View {
+        GeometryReader { proxy in
+            let offset = proxy.frame(in: .named("scroll")).minY
+            Color.clear.preference(key: ScrollPreferenceKey.self, value: offset)
+        }
+        .onPreferenceChange(ScrollPreferenceKey.self) { value in
+            withAnimation(.easeInOut) {
+                if value < 0 {
+                    contentHasScrolled = true
+                } else {
+                    contentHasScrolled = false
+                }
             }
         }
     }
