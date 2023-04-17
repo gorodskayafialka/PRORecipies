@@ -14,14 +14,16 @@ struct HomeView: View {
 
     @State private var contentHasScrolled = false
     @State private var selectedFeatureMeal: Meal? = nil
-
+    @State private var selectedDetailMeal: Meal? = nil
 
     var body: some View {
         ZStack {
             Color("Background")
 
-            if homeViewModel.showDetail {
-                detail
+            if let meal = selectedDetailMeal {
+                MealView(namespace: namespace, meal: meal) {
+                    selectedDetailMeal = nil
+                }
             }
 
             ScrollView {
@@ -40,7 +42,7 @@ struct HomeView: View {
                     .padding(20)
                     .offset(y: -100)
 
-                if homeViewModel.showDetail {
+                if selectedDetailMeal != nil {
                     dummyList
                         .padding(.horizontal, 20)
                         .offset(y: -110)
@@ -55,7 +57,7 @@ struct HomeView: View {
         .onAppearedOnce() {
             homeViewModel.fetchMeals()
         }
-        .onChange(of: homeViewModel.showDetail) { _ in
+        .onChange(of: selectedDetailMeal) { _ in
             withAnimation {
                 uiViewModel.showTab.toggle()
                 uiViewModel.showNav.toggle()
@@ -86,16 +88,6 @@ struct HomeView: View {
         }
     }
 
-    var detail: some View {
-        ForEach(homeViewModel.meals) { meal in
-            if meal == homeViewModel.selectedMeal {
-                MealView(namespace: namespace, meal: meal, showDetail: $homeViewModel.showDetail) {
-                    homeViewModel.selectedMeal = nil
-                }
-            }
-        }
-    }
-
     var meal: some View {
         ForEach(homeViewModel.meals) { meal in
             MealItem(
@@ -103,8 +95,7 @@ struct HomeView: View {
                 meal: meal
             ).onTapGesture {
                 withAnimation(.openCard) {
-                    homeViewModel.showDetail = true
-                    homeViewModel.selectedMeal = meal
+                    selectedDetailMeal = meal
                 }
             }
         }
@@ -143,7 +134,7 @@ struct HomeView: View {
         .tabViewStyle(.page(indexDisplayMode: .never))
         .frame(height: 460)
         .fullScreenCover(item: $selectedFeatureMeal) { meal in
-            MealView(namespace: namespace, meal: meal, showDetail: $homeViewModel.showDetail)
+            MealView(namespace: namespace, meal: meal)
         }
     }
 

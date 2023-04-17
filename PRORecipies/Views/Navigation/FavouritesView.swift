@@ -17,8 +17,10 @@ struct FavoritesView: View {
         ZStack {
             Color("Background")
 
-            if viewModel.showDetail {
-                detail
+            if let meal = viewModel.selectedMeal {
+                MealView(namespace: namespace, meal: meal) {
+                    viewModel.selectedMeal = nil
+                }
             }
 
             ScrollView {
@@ -44,7 +46,7 @@ struct FavoritesView: View {
         .onAppear {
             viewModel.fetchFavouritesMeals()
         }
-        .onChange(of: viewModel.showDetail) { _ in
+        .onChange(of: viewModel.selectedMeal) { _ in
             withAnimation {
                 uiViewModel.showTab.toggle()
                 uiViewModel.showNav.toggle()
@@ -59,22 +61,11 @@ struct FavoritesView: View {
         }
     }
 
-    var detail: some View {
-        ForEach(viewModel.favouriteMeals) { meal in
-            if meal == viewModel.selectedMeal {
-                MealView(namespace: namespace, meal: meal, showDetail: $viewModel.showDetail) {
-                    viewModel.selectedMeal = nil
-                }
-            }
-        }
-    }
-
     var meal: some View {
         ForEach(viewModel.favouriteMeals) { meal in
             MealItem(namespace: namespace, meal: meal)
                 .onTapGesture {
                     withAnimation(.openCard) {
-                        viewModel.showDetail = true
                         viewModel.selectedMeal = meal
                     }
                 }
