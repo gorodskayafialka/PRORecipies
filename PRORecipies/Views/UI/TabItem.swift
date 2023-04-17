@@ -18,6 +18,7 @@ struct TabItem: Identifiable, Hashable, Equatable {
 enum Tab: String, Equatable {
     case home = "Home"
     case explore = "Explore"
+    case shake = "Shake"
     case favorites = "Favorites"
     case list = "List"
 }
@@ -44,6 +45,8 @@ extension Tab {
             return Icons.home
         case .explore:
             return Icons.magnifyingglass
+        case .shake:
+            return Icons.shake
         case .favorites:
             return Icons.heart
         case .list:
