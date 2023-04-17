@@ -9,6 +9,6 @@ import Foundation
 
 enum InstructionsParser {
     static func parse(instruction: String) -> [String] {
-        instruction.components(separatedBy: ".").dropLast()
+        instruction.split(separator: /\.\s*/).map({String($0)})
     }
 }
