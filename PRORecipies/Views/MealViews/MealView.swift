@@ -52,7 +52,7 @@ struct MealView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         .offset(y: model.showDetail ? 50 : 0)
     }
-    
+
     var heartButton: some View {
         Button {
             if isFavourite {
@@ -60,8 +60,6 @@ struct MealView: View {
             } else {
                 storage.addFavouriteFoodId(meal.id)
             }
-            print(meal.id)
-            print(isFavourite ? "delete" : "add")
             isFavourite.toggle()
         } label: {
             HeartButton(isFavourite: $isFavourite)

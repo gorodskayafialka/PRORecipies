@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  FavoritesView.swift
 //  PRORecipies
 //
 //  Created by Anvar on 11.04.2023.
@@ -60,7 +60,6 @@ struct FavoritesView: View {
 
 struct FavouriteView_Previews: PreviewProvider {
     static var previews: some View {
-        let model = FavouritesViewModel(networkService: .makeUrlSessionedService())
-        FavoritesView(favouriteViewModel: model).environmentObject(UIModel())
+        FavoritesView(favouriteViewModel: FavouritesViewModel(networkService: .mock)).environmentObject(UIModel())
     }
 }

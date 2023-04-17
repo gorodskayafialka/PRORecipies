@@ -31,7 +31,6 @@ final class FavouritesIdsStorage {
 
 }
 
-
 extension PersistentStorage {
     fileprivate func addArray(_ value: String, forKey key: String) {
         var arr: Array<String> = self.value(forKey: key, default: [])
