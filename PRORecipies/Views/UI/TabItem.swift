@@ -26,7 +26,7 @@ enum Tab: String, Equatable {
 enum NavigationTitle: String {
     case home = "PRORecipes"
     case search = "Search"
-    case favorites = "Favorites"
+    case favourites = "Favourites"
     case list = "List"
 }
 
