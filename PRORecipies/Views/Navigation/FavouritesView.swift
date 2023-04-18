@@ -27,16 +27,9 @@ struct FavoritesView: View {
                 scrollDetection
 
                 Rectangle()
-                    .frame(width: 100, height: 200)
+                    .frame(width: 100, height: 210)
                     .opacity(0)
 
-
-                Text("featured meals".uppercased())
-                    .font(.body.weight(.semibold))
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(20)
-                    .offset(y: -100)
                 list
                     .padding(.horizontal, 20)
                     .offset(y: -110)
@@ -53,7 +46,7 @@ struct FavoritesView: View {
             }
             viewModel.fetchFavouritesMeals()
         }
-        .overlay(NavigationBar(title: NavigationTitle.home.rawValue, contentHasScrolled: $contentHasScrolled))
+        .overlay(NavigationBar(title: NavigationTitle.favourites.rawValue, contentHasScrolled: $contentHasScrolled))
     }
 
     var list: some View {

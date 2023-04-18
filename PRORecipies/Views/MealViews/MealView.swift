@@ -13,6 +13,7 @@ struct MealView: View {
     enum CloseAction {
         case dismiss
         case closeWithAction(Action)
+        case noClosing
     }
 
     var namespace: Namespace.ID
@@ -39,13 +40,6 @@ struct MealView: View {
             .background(Color("Background"))
             .mask(RoundedRectangle(cornerRadius: appear ? 0 : 30))
             .background(.ultraThinMaterial)
-
-            HStack {
-                heartButton
-                closeButton
-            }
-            .offset(y: 50)
-            .padding(30)
         }
         .ignoresSafeArea()
         .zIndex(1)
@@ -96,6 +90,18 @@ struct MealView: View {
                     .offset(y: 100)
                     .padding(20)
                     .padding(.bottom, 20)
+            )
+            .overlay(
+                HStack {
+                    heartButton
+                    if closeAction.needCloseButton {
+                        closeButton
+                    }
+                }
+                .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .offset(y: 30)
+                .padding(30)
             )
         }
         .frame(height: UIScreen.main.bounds.width)
@@ -212,11 +218,12 @@ extension MealView {
 
     init(
         namespace: Namespace.ID,
-        meal: Meal
+        meal: Meal,
+        needsClosedButton: Bool = true
     ){
         self.namespace = namespace
         self.viewModel = MealViewModel(meal: meal)
-        self.closeAction = .dismiss
+        self.closeAction = needsClosedButton ? .dismiss : .noClosing
     }
 }
 
@@ -227,6 +234,8 @@ extension MealView {
             return { dismiss() }
         case.closeWithAction(let action):
             return action
+        case .noClosing:
+            return {}
         }
     }
 }
@@ -237,6 +246,17 @@ extension MealView.CloseAction {
         case .closeWithAction:
             return true
         case .dismiss:
+            return false
+        case .noClosing:
+            return true
+        }
+    }
+
+    fileprivate var needCloseButton: Bool {
+        switch self {
+        case .dismiss, .closeWithAction:
+            return true
+        case .noClosing:
             return false
         }
     }
