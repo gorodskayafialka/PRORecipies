@@ -51,6 +51,7 @@ struct FavoritesView: View {
                 uiViewModel.showTab.toggle()
                 uiViewModel.showNav.toggle()
             }
+            viewModel.fetchFavouritesMeals()
         }
         .overlay(NavigationBar(title: NavigationTitle.home.rawValue, contentHasScrolled: $contentHasScrolled))
     }

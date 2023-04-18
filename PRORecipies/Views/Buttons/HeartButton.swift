@@ -11,7 +11,7 @@ struct HeartButton: View {
     var body: some View {
         Image(systemName: isFavourite ? "heart.fill" : "heart")
             .imageScale(.large)
-            .foregroundColor(.secondary)
+            .foregroundColor(.red)
             .padding(8)
             .background(.ultraThinMaterial, in: Circle())
     }

@@ -16,8 +16,8 @@ struct MealView: View {
     }
 
     var namespace: Namespace.ID
-    var meal: Meal
 
+    @StateObject private var viewModel: MealViewModel
     @State private var appear = false
     @State private var isFavourite = false
     @State private var viewStateSize: CGSize = .zero
@@ -63,14 +63,9 @@ struct MealView: View {
 
     var heartButton: some View {
         Button {
-            if isFavourite {
-                storage.deleteFavouriteFoodsIds(meal.id)
-            } else {
-                storage.addToFavourite(meal.id)
-            }
-            isFavourite.toggle()
+            viewModel.isFavourite.toggle()
         } label: {
-            HeartButton(isFavourite: $isFavourite)
+            HeartButton(isFavourite: $viewModel.isFavourite)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
@@ -91,7 +86,7 @@ struct MealView: View {
             )
             .mask(
                 RoundedRectangle(cornerRadius: appear ? 0 : 30)
-                    .matchedGeometryEffect(id: "mask\(meal)", in: namespace)
+                    .matchedGeometryEffect(id: "mask\(viewModel.meal)", in: namespace)
                     .offset(y: scrollY > 0 ? -scrollY : 0)
             )
             .overlay(
@@ -108,11 +103,11 @@ struct MealView: View {
     }
 
     var banner: some View {
-        CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { image in
+        CacheAsyncImage(url: viewModel.meal.thumbnailLink.flatMap(URL.init(string:)), content: { image in
             image
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .matchedGeometryEffect(id: "image\(meal)", in: namespace)
+                .matchedGeometryEffect(id: "image\(viewModel.meal)", in: namespace)
         }, placeholder: {
             ProgressView()
                 .offset(y: -30)
@@ -121,23 +116,23 @@ struct MealView: View {
 
     var card: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(meal.name ?? "N/A")
+            Text(viewModel.meal.name ?? "N/A")
                 .font(.title).bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(.primary)
-                .matchedGeometryEffect(id: "name\(meal)", in: namespace)
+                .matchedGeometryEffect(id: "name\(viewModel.meal)", in: namespace)
 
-            Text(meal.category?.uppercased() ?? "N/A")
+            Text(viewModel.meal.category?.uppercased() ?? "N/A")
                 .font(.footnote).bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(.primary.opacity(0.7))
-                .matchedGeometryEffect(id: "category\(meal)", in: namespace)
+                .matchedGeometryEffect(id: "category\(viewModel.meal)", in: namespace)
 
-            Text(meal.area?.uppercased() ?? "N/A")
+            Text(viewModel.meal.area?.uppercased() ?? "N/A")
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(.primary.opacity(0.7))
-                .matchedGeometryEffect(id: "area\(meal)", in: namespace)
+                .matchedGeometryEffect(id: "area\(viewModel.meal)", in: namespace)
         }
         .padding(20)
         .padding(.vertical, 10)
@@ -155,7 +150,7 @@ struct MealView: View {
             .frame(maxHeight: .infinity, alignment: .bottom)
             .cornerRadius(30)
             .blur(radius: 30)
-            .matchedGeometryEffect(id: "blur\(meal)", in: namespace)
+            .matchedGeometryEffect(id: "blur\(viewModel.meal)", in: namespace)
             .opacity(appear ? 0 : 1)
     }
 
@@ -168,8 +163,8 @@ struct MealView: View {
     }
 
     var listSwitcherForm: some View {
-        ListsSwitcher(ingredientsList: meal.ingredients ?? [],
-                      instructions: meal.instructions ?? "")
+        ListsSwitcher(ingredientsList: viewModel.meal.ingredients ?? [],
+                      instructions: viewModel.meal.instructions ?? "")
         .background(
             blurCard
         )
@@ -177,7 +172,7 @@ struct MealView: View {
             cardForm
         )
         .padding(20)
-        .matchedGeometryEffect(id: "blurSwitch\(meal)", in: namespace)
+        .matchedGeometryEffect(id: "blurSwitch\(viewModel.meal)", in: namespace)
         .opacity(appear ? 1 : 0)
     }
 
@@ -201,6 +196,7 @@ struct MealView: View {
             appear = false
         }
     }
+
 }
 
 extension MealView {
@@ -210,7 +206,7 @@ extension MealView {
         onClose: @escaping Action
     ){
         self.namespace = namespace
-        self.meal = meal
+        self._viewModel = StateObject(wrappedValue: MealViewModel(meal: meal))
         self.closeAction = .closeWithAction(onClose)
     }
 
@@ -219,7 +215,7 @@ extension MealView {
         meal: Meal
     ){
         self.namespace = namespace
-        self.meal = meal
+        self._viewModel = StateObject(wrappedValue: MealViewModel(meal: meal))
         self.closeAction = .dismiss
     }
 }
@@ -251,10 +247,8 @@ struct MealView_Previews: PreviewProvider {
     @Namespace static var namespace
 
     static var previews: some View {
-        MealView(
-            namespace: namespace,
-            meal: Meals.dummyData1.meals[0],
-            onClose: { }
-        )
+        MealView(namespace: namespace,
+                 meal: Meals.dummyData1.meals[0],
+                 onClose: { })
     }
 }
