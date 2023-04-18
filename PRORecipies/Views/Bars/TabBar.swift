@@ -70,7 +70,7 @@ struct TabBar: View {
                             .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 35, height: 35)
-                            .foregroundColor(selectedTab == tabItem ? tabItem.color : Color("tabbarItem"))
+                            .foregroundColor(selectedTab == tabItem ? tabItem.selectedColor : tabItem.color)
                             .padding(selectedTab == tabItem ? 15 : 0)
                             .matchedGeometryEffect(id: tabItem, in: animation)
                             .offset(
@@ -96,7 +96,11 @@ struct TabBar: View {
         .padding(.horizontal, 50)
         .background(Color("tabbar"))
         .background(
-            Color("tabbar").clipShape(CustomCurveShape(xAxis: xAxis))
+            Color("tabbar")
+                .clipShape(
+                    CustomCurveShape(xAxis: xAxis)
+                        .offset(y: 5)
+                )
         )
     }
 }
