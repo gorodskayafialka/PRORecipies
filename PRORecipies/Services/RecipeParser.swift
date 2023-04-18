@@ -9,6 +9,7 @@ import Foundation
 
 enum InstructionsParser {
     static func parse(instruction: String) -> [String] {
-        instruction.split(separator: /\.\s*/).map({String($0)})
+        let arrayWithOutStep = instruction.split(separator: /\s*(S|s)(T|t)(E|e)(P|p)\s*\d*\s*/).map({String($0)})
+        return arrayWithOutStep.joined(separator: " ").split(separator: /\.\s*/).map({String($0)})
     }
 }

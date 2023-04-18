@@ -38,6 +38,6 @@ final class FavouritesViewModel: ObservableObject {
                 continue
             }
         }
-        favouriteMeals = favouriteTmpMeals
+        favouriteMeals = favouriteTmpMeals.reversed()
     }
 }
