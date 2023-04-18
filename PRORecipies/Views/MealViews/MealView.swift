@@ -170,7 +170,7 @@ struct MealView: View {
 
     var listSwitcherForm: some View {
         ListsSwitcher(ingredientsList: viewModel.meal.ingredients ?? [],
-                      instructions: viewModel.meal.instructions ?? "")
+                      instructions: viewModel.meal.instructions ?? "", meal: viewModel.meal)
         .background(
             blurCard
         )

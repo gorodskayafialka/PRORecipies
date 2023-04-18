@@ -9,7 +9,7 @@ import SwiftUI
 
 enum List: String {
     case ingredients = "Ingredients"
-    case recepie = "Recepie"
+    case recipe = "Recipe"
 }
 
 extension String {
@@ -22,40 +22,61 @@ struct ListsSwitcher: View {
     @State private var chosenList = List.ingredients
     private let ingredientsList: [Ingredient]
     private let recepieList: [String]
-    init(ingredientsList: [Ingredient], instructions: String) {
+    @StateObject var listViewModel: ListSwitcherViewModel
+
+    init(ingredientsList: [Ingredient], instructions: String, meal: Meal) {
         self.ingredientsList = ingredientsList
         self.recepieList = InstructionsParser.parse(instruction: instructions)
+        _listViewModel = StateObject(wrappedValue: ListSwitcherViewModel(meal: meal))
     }
+
     var body: some View {
         VStack {
-            CustomSegmentedControl(preselectedIndex: $chosenList, options: [List.ingredients, List.recepie])
+            CustomSegmentedControl(preselectedIndex: $chosenList, options: [List.ingredients, List.recipe])
 
             switch chosenList {
             case .ingredients:
                 ForEach(ingredientsList.indices, id: \.self) { index in
-                    VStack {
+
+                    HStack(alignment: .top) {
+                        CheckboxField(isMarked: $listViewModel.ingredientsCheckBoxes[index])
+                            .onTapGesture {
+                                listViewModel.ingredientsCheckBoxes[index].toggle()
+                            }
+                            .padding(.top, 5)
+                            .padding(.trailing, 5)
+
                         HStack {
                             Text("\(index + 1). \(ingredientsList[index].name.capitalizingFirstLetter())")
                             Spacer()
                             Text("\(ingredientsList[index].measure ?? "")")
-                        }.padding(.horizontal, 30)
-                            .padding(.vertical, 15)
-                            .font(.title3)
-                    }
+                        }
+                    }.padding(.horizontal, 30)
+                        .padding(.vertical, 15)
+                        .font(.title3)
+
                     if index != ingredientsList.count - 1 {
                         Divider().padding(.horizontal, 30)
                     }
                 }
-            case .recepie:
+            case .recipe:
                 ForEach(recepieList.indices, id: \.self) { index in
-                    VStack {
+
+                    HStack(alignment: .top) {
+                        CheckboxField(isMarked: $listViewModel.instructionsCheckBoxes[index])
+                            .onTapGesture {
+                                listViewModel.instructionsCheckBoxes[index].toggle()
+                            }
+                            .padding(.top, 5)
+                            .padding(.trailing, 5)
+
                         HStack {
                             Text("\(index + 1). \(recepieList[index].capitalizingFirstLetter())")
                             Spacer()
-                        }.padding(.horizontal, 30)
-                            .padding(.vertical, 15)
-                            .font(.title3)
-                    }
+                        }
+                    }.padding(.horizontal, 30)
+                        .padding(.vertical, 15)
+                        .font(.title3)
 
                     if index != recepieList.count - 1 {
                         Divider().padding(.horizontal, 30)
@@ -65,5 +86,8 @@ struct ListsSwitcher: View {
         }
         .foregroundColor(.primary)
         .padding(.bottom, 10)
+        .onAppear{
+            listViewModel.getCheckboxesMarks()
+        }
     }
 }
