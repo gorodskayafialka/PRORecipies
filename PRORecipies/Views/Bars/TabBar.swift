@@ -40,9 +40,6 @@ struct TabBar: View {
                 FavoritesView(viewModel: viewModels.favourite)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[3])
-                ListView()
-                    .ignoresSafeArea(.all, edges: .all)
-                    .tag(tabItems[4])
             }
 
             customTabs
