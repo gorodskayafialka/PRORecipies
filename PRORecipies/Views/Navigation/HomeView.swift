@@ -69,7 +69,14 @@ struct HomeView: View {
     var list: some View {
         LazyVStack(spacing: 20) {
             ForEach(homeViewModel.meals) { meal in
-                MealItem(namespace: namespace, meal: meal)
+                MealItem(
+                    namespace: namespace,
+                    meal: meal
+                ).onTapGesture {
+                    withAnimation(.openCard) {
+                        selectedDetailMeal = meal
+                    }
+                }
             }
             .frame(height: 300)
         }
@@ -84,19 +91,6 @@ struct HomeView: View {
                     .cornerRadius(30)
                     .shadow(color: Color("Shadow").opacity(0.2), radius: 20, x: 0, y: 10)
                     .opacity(0.3)
-            }
-        }
-    }
-
-    var meal: some View {
-        ForEach(homeViewModel.meals) { meal in
-            MealItem(
-                namespace: namespace,
-                meal: meal
-            ).onTapGesture {
-                withAnimation(.openCard) {
-                    selectedDetailMeal = meal
-                }
             }
         }
     }
