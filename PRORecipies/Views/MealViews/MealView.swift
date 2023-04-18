@@ -13,6 +13,7 @@ struct MealView: View {
     enum CloseAction {
         case dismiss
         case closeWithAction(Action)
+        case noClosing
     }
 
     var namespace: Namespace.ID
@@ -93,7 +94,9 @@ struct MealView: View {
             .overlay(
                 HStack {
                     heartButton
-                    closeButton
+                    if closeAction.needCloseButton {
+                        closeButton
+                    }
                 }
                 .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
                 .frame(maxHeight: .infinity, alignment: .top)
@@ -215,11 +218,12 @@ extension MealView {
 
     init(
         namespace: Namespace.ID,
-        meal: Meal
+        meal: Meal,
+        needsClosedButton: Bool = true
     ){
         self.namespace = namespace
         self._viewModel = StateObject(wrappedValue: MealViewModel(meal: meal))
-        self.closeAction = .dismiss
+        self.closeAction = needsClosedButton ? .dismiss : .noClosing
     }
 }
 
@@ -230,6 +234,8 @@ extension MealView {
             return { dismiss() }
         case.closeWithAction(let action):
             return action
+        case .noClosing:
+            return {}
         }
     }
 }
@@ -240,6 +246,17 @@ extension MealView.CloseAction {
         case .closeWithAction:
             return true
         case .dismiss:
+            return false
+        case .noClosing:
+            return true
+        }
+    }
+
+    fileprivate var needCloseButton: Bool {
+        switch self {
+        case .dismiss, .closeWithAction:
+            return true
+        case .noClosing:
             return false
         }
     }
