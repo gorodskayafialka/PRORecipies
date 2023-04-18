@@ -18,20 +18,15 @@ struct SearchView: View {
             Color("Background")
                 .ignoresSafeArea()
 
-            VStack {
-                Rectangle()
-                    .frame(width: 100, height: 70)
-                    .opacity(0)
+            ScrollView {
+                scrollDetection
 
-                ScrollView {
-                    SearchBar(text: $searchText)
-                        .offset(y: contentHasScrolled ? -100 : 20)
-                        .padding(.top, 20)
+                SearchBar(text: $searchText)
+                    .offset(y: contentHasScrolled ? -100 : 0)
+                    .padding(.top, 100)
 
-                    scrollDetection
 
-                    list
-                }
+                list
             }
             .overlay(NavigationBar(title: NavigationTitle.search.rawValue, contentHasScrolled: $contentHasScrolled))
         }
@@ -46,6 +41,7 @@ struct SearchView: View {
                 RowMeal(meal: meal)
                     .padding(.horizontal, 20)
                     .background(Color("Background"))
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         searchViewModel.selectedMeal = meal
                     }
