@@ -12,6 +12,7 @@ struct TabItem: Identifiable, Hashable, Equatable {
     var name: String
     var icon: String
     var color: Color
+    var selectedColor: Color
     var selection: Tab
 }
 
@@ -32,7 +33,7 @@ enum NavigationTitle: String {
 
 extension Tab {
     var tabItem: TabItem {
-        TabItem(name: name, icon: icon.rawValue, color: color, selection: selection)
+        TabItem(name: name, icon: icon.rawValue, color: color, selectedColor: selectedColor, selection: selection)
     }
 
     private var name: String {
@@ -54,8 +55,12 @@ extension Tab {
         }
     }
 
+    private var selectedColor: Color {
+        Color("accenttabcolor")
+    }
+    
     private var color: Color {
-        Color.yellow
+        Color("tabbaritem")
     }
 
     private var selection: Tab {
