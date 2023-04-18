@@ -8,28 +8,36 @@
 import SwiftUI
 
 struct SearchBar: View {
+    @EnvironmentObject var uiViewModel: UIViewModel
     @Binding var text: String
     @State private var isEditing = false
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         HStack {
 
-            TextField("Search for a meal", text: $text)
-                .padding(7)
-                .padding(.horizontal, 25)
-                .background(.ultraThinMaterial)
-                .cornerRadius(20)
-                .onTapGesture {
-                    withAnimation {
-                        self.isEditing = true
-                    }
+            TextField("Search for a meal", text: $text) { _ in
+                withAnimation(.linear(duration: 0.3)) {
+                    uiViewModel.showTab.toggle()
                 }
+            }
+            .padding(7)
+            .padding(.horizontal, 25)
+            .background(.ultraThinMaterial)
+            .cornerRadius(20)
+            .focused($isFocused)
+            .onTapGesture {
+                withAnimation {
+                    isEditing = true
+                }
+            }
 
             if isEditing {
                 Button(action: {
                     withAnimation {
-                        self.isEditing = false
-                        self.text = ""
+                        isEditing = false
+                        isFocused = false
+                        text = ""
                     }
                 }) {
                     Text("Cancel")

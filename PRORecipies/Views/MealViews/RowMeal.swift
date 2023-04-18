@@ -14,16 +14,15 @@ struct RowMeal: View {
         HStack {
             CacheAsyncImage(url: meal.thumbnailLink.flatMap(URL.init(string:)), content: { image in
                 image
+                    .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: 100, maxHeight: 100)
-                    .cornerRadius(30)
                     .padding(.vertical, 20)
             }, placeholder: {
                 Rectangle()
                     .redacted(reason: .placeholder)
-                    .frame(maxWidth: 100, maxHeight: 100)
-                    .cornerRadius(30)
             })
+            .frame(width: 100, height: 100)
+            .cornerRadius(30)
 
             VStack(alignment: .leading, spacing: 8) {
                 Spacer()
