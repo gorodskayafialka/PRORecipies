@@ -58,7 +58,7 @@ extension Tab {
     private var selectedColor: Color {
         Color("accenttabcolor")
     }
-    
+
     private var color: Color {
         Color("tabbaritem")
     }

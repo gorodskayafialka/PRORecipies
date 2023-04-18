@@ -39,13 +39,6 @@ struct MealView: View {
             .background(Color("Background"))
             .mask(RoundedRectangle(cornerRadius: appear ? 0 : 30))
             .background(.ultraThinMaterial)
-
-            HStack {
-                heartButton
-                closeButton
-            }
-            .offset(y: 50)
-            .padding(30)
         }
         .ignoresSafeArea()
         .zIndex(1)
@@ -96,6 +89,16 @@ struct MealView: View {
                     .offset(y: 100)
                     .padding(20)
                     .padding(.bottom, 20)
+            )
+            .overlay(
+                HStack {
+                    heartButton
+                    closeButton
+                }
+                .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .offset(y: 30)
+                .padding(30)
             )
         }
         .frame(height: UIScreen.main.bounds.width)
