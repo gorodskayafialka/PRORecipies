@@ -18,7 +18,7 @@ final class MealViewModel: ObservableObject {
       }
     }
     public let meal: Meal
-    private var storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: .standard))
+    private var storage: FavouritesIdsStorage
 
     init(meal: Meal, storage: FavouritesIdsStorage = .init(storage: PersistentStorage(userDefaults: .standard))) {
         self.meal = meal
