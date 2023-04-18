@@ -22,6 +22,7 @@ struct SearchView: View {
                 scrollDetection
 
                 SearchBar(text: $searchText)
+                    .contentShape(Rectangle())
                     .offset(y: contentHasScrolled ? -100 : 0)
                     .padding(.top, 100)
 
