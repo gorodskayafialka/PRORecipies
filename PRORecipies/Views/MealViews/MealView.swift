@@ -18,7 +18,7 @@ struct MealView: View {
 
     var namespace: Namespace.ID
 
-    @StateObject private var viewModel: MealViewModel
+    @ObservedObject private var viewModel: MealViewModel
     @State private var appear = false
     @State private var isFavourite = false
     @State private var viewStateSize: CGSize = .zero
@@ -212,7 +212,7 @@ extension MealView {
         onClose: @escaping Action
     ){
         self.namespace = namespace
-        self._viewModel = StateObject(wrappedValue: MealViewModel(meal: meal))
+        self.viewModel = MealViewModel(meal: meal)
         self.closeAction = .closeWithAction(onClose)
     }
 
@@ -222,7 +222,7 @@ extension MealView {
         needsClosedButton: Bool = true
     ){
         self.namespace = namespace
-        self._viewModel = StateObject(wrappedValue: MealViewModel(meal: meal))
+        self.viewModel = MealViewModel(meal: meal)
         self.closeAction = needsClosedButton ? .dismiss : .noClosing
     }
 }
