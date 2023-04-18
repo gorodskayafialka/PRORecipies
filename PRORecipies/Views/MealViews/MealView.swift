@@ -34,6 +34,7 @@ struct MealView: View {
                 VStack {
                     cover
                     listSwitcherForm
+                        .padding(.top, 30)
                 }
             }
             .coordinateSpace(name: "scroll")
@@ -70,6 +71,17 @@ struct MealView: View {
 
             VStack {
                 Spacer()
+
+                if let _ = viewModel.meal.youTubeLink {
+                    Button {
+
+                    } label: {
+                        PlayButtonView()
+                            .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
+                            .padding(10)
+                            .padding(.bottom, 150)
+                    }
+                }
             }
             .frame(maxWidth: .infinity)
             .background(
@@ -87,7 +99,7 @@ struct MealView: View {
                 card
                     .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
                     .frame(maxHeight: .infinity, alignment: .bottom)
-                    .offset(y: 100)
+                    .offset(y: 130)
                     .padding(20)
                     .padding(.bottom, 20)
             )
@@ -126,6 +138,7 @@ struct MealView: View {
                 .font(.title).bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(.primary)
+                .lineLimit(3)
                 .matchedGeometryEffect(id: "name\(viewModel.meal)", in: namespace)
 
             Text(viewModel.meal.category?.uppercased() ?? "N/A")
