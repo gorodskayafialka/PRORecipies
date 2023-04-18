@@ -35,6 +35,10 @@ struct HomeView: View {
 
                 featured.padding(.bottom, 20)
 
+                Rectangle()
+                    .frame(height: 44)
+                    .opacity(0)
+
                 Text("Meals".uppercased())
                     .font(.body.weight(.semibold))
                     .foregroundColor(.secondary)
@@ -115,7 +119,7 @@ struct HomeView: View {
                                     .padding(.horizontal, 15)
                                     .offset(x: reader.frame(in: .global).minX / 2, y: -60)
                             }, placeholder: {
-                                    ProgressView().offset(y: -30)
+                                ProgressView().offset(y: -30)
                             })
                         )
                         .padding(20)
@@ -125,8 +129,8 @@ struct HomeView: View {
                 }
             }
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .frame(height: 460)
+        .tabViewStyle(.page)
+        .frame(height: 420)
         .fullScreenCover(item: $selectedFeatureMeal) { meal in
             MealView(namespace: namespace, meal: meal)
         }
