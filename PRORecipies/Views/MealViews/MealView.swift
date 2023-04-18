@@ -33,6 +33,7 @@ struct MealView: View {
                 VStack {
                     cover
                     listSwitcherForm
+                        .padding(.top, 30)
                 }
             }
             .coordinateSpace(name: "scroll")
@@ -93,9 +94,14 @@ struct MealView: View {
                 card
                     .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
                     .frame(maxHeight: .infinity, alignment: .bottom)
-                    .offset(y: 100)
+                    .offset(y: 130)
                     .padding(20)
                     .padding(.bottom, 20)
+            )
+            .overlay(
+                PlayButton()
+                    .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
+                    .padding(10)
             )
         }
         .frame(height: UIScreen.main.bounds.width)
@@ -120,6 +126,7 @@ struct MealView: View {
                 .font(.title).bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(.primary)
+                .lineLimit(3)
                 .matchedGeometryEffect(id: "name\(viewModel.meal)", in: namespace)
 
             Text(viewModel.meal.category?.uppercased() ?? "N/A")
