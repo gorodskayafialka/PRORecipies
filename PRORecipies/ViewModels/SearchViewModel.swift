@@ -28,6 +28,7 @@ final class SearchViewModel: ObservableObject {
         do {
             meals = try await Array(networkService.search(text).meals.prefix(10))
         } catch {
+            meals = []
             return
         }
     }
