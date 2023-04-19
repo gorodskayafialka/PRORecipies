@@ -26,6 +26,33 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+			<key>Fruits</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Fruits</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>Pancake</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Pancake</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>Ramen</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Ramen</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
 		</dict>
 	</dict>
 	<key>UILaunchScreen</key>

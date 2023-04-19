@@ -15,7 +15,6 @@ struct PlayButtonView: View {
                 .overlay(
                     PlayShape()
                         .stroke(.white)
-                        .offset(x: 3)
                 )
                 .frame(width: 36, height: 36)
         }

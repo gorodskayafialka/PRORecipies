@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("isDarkMode") private var isDarkMode = false
-
-
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -39,15 +36,6 @@ struct SettingsView: View {
                 }
             }
         }
-        .environment(\.colorScheme, isDarkMode ? .dark : .light)
-    }
-
-    var themeToggle: some View {
-        Section {
-            Toggle(isOn: $isDarkMode) {
-                Label(isDarkMode ? "Dark Mode" : "Lite Mode", systemImage: isDarkMode ? "moon" : "sun.max")
-            }
-        }
     }
 
     var settingsSection: some View {
@@ -58,8 +46,6 @@ struct SettingsView: View {
             } label: {
                 Label("Icons", systemImage: "photo")
             }
-
-            themeToggle
         }
     }
 

@@ -9,12 +9,10 @@ import SwiftUI
 
 @main
 struct PRORecipiesApp: App {
-    @AppStorage("isDarkMode") private var isDarkMode = true
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .preferredColorScheme(isDarkMode ? .dark : .light)
         }
     }
 }
