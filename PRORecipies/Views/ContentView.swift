@@ -16,9 +16,14 @@ struct ContentView: View {
     }
 
     var body: some View {
-        TabBar(networkService: networkService)
-            .environmentObject(UIViewModel())
+        ZStack {
+            TabBar(networkService: networkService)
+                .environmentObject(UIViewModel())
+
+            SplashScreen()
+        }
     }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
