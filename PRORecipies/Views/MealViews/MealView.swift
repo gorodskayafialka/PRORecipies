@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct MealView: View {
     typealias Action = () -> ()
@@ -22,6 +23,7 @@ struct MealView: View {
     @State private var appear = false
     @State private var isFavourite = false
     @State private var viewStateSize: CGSize = .zero
+    @State private var showVideo = false
     private let storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: .standard))
 
     @Environment(\.dismiss) var dismiss
@@ -45,6 +47,9 @@ struct MealView: View {
         .ignoresSafeArea()
         .zIndex(1)
         .onAppear { fadeIn() }
+        .fullScreenCover(isPresented: $showVideo) {
+            VideoView(meal: viewModel.meal)
+        }
     }
 
     var closeButton: some View {
@@ -74,7 +79,7 @@ struct MealView: View {
 
                 if let _ = viewModel.meal.youTubeLink {
                     Button {
-
+                        showVideo.toggle()
                     } label: {
                         PlayButtonView()
                             .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
@@ -127,8 +132,7 @@ struct MealView: View {
                 .aspectRatio(contentMode: .fill)
                 .matchedGeometryEffect(id: "image\(viewModel.meal)", in: namespace)
         }, placeholder: {
-            ProgressView()
-                .offset(y: -30)
+
         })
     }
 
