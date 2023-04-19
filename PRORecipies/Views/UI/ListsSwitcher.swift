@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum List: String {
+enum Lists: String {
     case ingredients = "Ingredients"
     case recipe = "Recipe"
 }
@@ -19,7 +19,7 @@ extension String {
 }
 
 struct ListsSwitcher: View {
-    @State private var chosenList = List.ingredients
+    @State private var chosenList = Lists.ingredients
     private let ingredientsList: [Ingredient]
     private let recepieList: [String]
     @StateObject var listViewModel: ListSwitcherViewModel
@@ -32,7 +32,7 @@ struct ListsSwitcher: View {
 
     var body: some View {
         VStack {
-            CustomSegmentedControl(preselectedIndex: $chosenList, options: [List.ingredients, List.recipe])
+            CustomSegmentedControl(preselectedIndex: $chosenList, options: [Lists.ingredients, Lists.recipe])
 
             switch chosenList {
             case .ingredients:
