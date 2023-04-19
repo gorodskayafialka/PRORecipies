@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct MealView: View {
     typealias Action = () -> ()
@@ -22,6 +23,7 @@ struct MealView: View {
     @State private var appear = false
     @State private var isFavourite = false
     @State private var viewStateSize: CGSize = .zero
+    @State private var showVideo = false
     private let storage = FavouritesIdsStorage(storage: PersistentStorage(userDefaults: .standard))
 
     @Environment(\.dismiss) var dismiss
@@ -34,6 +36,7 @@ struct MealView: View {
                 VStack {
                     cover
                     listSwitcherForm
+                        .padding(.top, 30)
                 }
             }
             .coordinateSpace(name: "scroll")
@@ -44,6 +47,9 @@ struct MealView: View {
         .ignoresSafeArea()
         .zIndex(1)
         .onAppear { fadeIn() }
+        .fullScreenCover(isPresented: $showVideo) {
+            VideoView(meal: viewModel.meal)
+        }
     }
 
     var closeButton: some View {
@@ -70,6 +76,17 @@ struct MealView: View {
 
             VStack {
                 Spacer()
+
+                if let _ = viewModel.meal.youTubeLink {
+                    Button {
+                        showVideo.toggle()
+                    } label: {
+                        PlayButtonView()
+                            .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
+                            .padding(10)
+                            .padding(.bottom, 150)
+                    }
+                }
             }
             .frame(maxWidth: .infinity)
             .background(
@@ -87,7 +104,7 @@ struct MealView: View {
                 card
                     .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
                     .frame(maxHeight: .infinity, alignment: .bottom)
-                    .offset(y: 100)
+                    .offset(y: 130)
                     .padding(20)
                     .padding(.bottom, 20)
             )
@@ -115,8 +132,7 @@ struct MealView: View {
                 .aspectRatio(contentMode: .fill)
                 .matchedGeometryEffect(id: "image\(viewModel.meal)", in: namespace)
         }, placeholder: {
-            ProgressView()
-                .offset(y: -30)
+
         })
     }
 
@@ -126,6 +142,7 @@ struct MealView: View {
                 .font(.title).bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(.primary)
+                .lineLimit(3)
                 .matchedGeometryEffect(id: "name\(viewModel.meal)", in: namespace)
 
             Text(viewModel.meal.category?.uppercased() ?? "N/A")
