@@ -33,6 +33,12 @@
 			<key>UIPrerenderedIcon</key>
 			<false/>
 		</dict>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIImageName</key>
+		<string>logo_small</string>
+		<key>UIColorName</key>
+		<string>Background</string>
 	</dict>
 </dict>
 </plist>
