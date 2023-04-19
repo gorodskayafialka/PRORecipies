@@ -21,14 +21,12 @@ enum Tab: String, Equatable {
     case search = "Search"
     case shake = "Shake"
     case favorites = "Favorites"
-    case list = "List"
 }
 
 enum NavigationTitle: String {
     case home = "PRORecipes"
     case search = "Search"
     case favourites = "Favourites"
-    case list = "List"
 }
 
 extension Tab {
@@ -50,8 +48,6 @@ extension Tab {
             return Icons.shake
         case .favorites:
             return Icons.heart
-        case .list:
-            return Icons.list
         }
     }
 
