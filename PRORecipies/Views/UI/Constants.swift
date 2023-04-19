@@ -12,4 +12,5 @@ enum Icons: String {
     case magnifyingglass = "magnifyingglass.circle.fill"
     case shake = "dice.fill"
     case heart = "heart.circle.fill"
+    case gear = "gear.circle.fill"
 }

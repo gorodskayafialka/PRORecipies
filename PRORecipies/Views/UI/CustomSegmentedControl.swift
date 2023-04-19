@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CustomSegmentedControl: View {
-    @Binding var preselectedIndex: List
-    var options: [List]
+    @Binding var preselectedIndex: Lists
+    var options: [Lists]
     let color = Color("Shadow")
 
     var body: some View {

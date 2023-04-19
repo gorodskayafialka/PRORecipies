@@ -8,6 +8,31 @@
 		<string>logo_small</string>
 		<key>UIColorName</key>
 		<string>Background</string>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Dish</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Dish</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>PRORecipes</string>
+			</array>
+			<key>CFBundleIconName</key>
+			<string>Default</string>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
 	</dict>
 </dict>
 </plist>
