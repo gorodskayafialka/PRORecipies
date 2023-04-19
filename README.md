@@ -1,4 +1,10 @@
 # PROРецепты
+---
+[![build-status](https://github.com/gorodskayafialka/PRORecipies/actions/workflows/swift.yml/badge.svg)](https://github.com/gorodskayafialka/PRORecipies/actions)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4.svg)](CODE_OF_CONDUCT.md)
+[![License: MIT](https://img.shields.io/github/license/gorodskayafialka/PRORecipies)](LICENSE)
+---
+
 
 iOS-приложение по поиску рецептов и всего, что с ними связано.
 Приложение поддерживает: 
