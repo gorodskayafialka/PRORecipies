@@ -20,7 +20,7 @@ struct MealView: View {
     var namespace: Namespace.ID
 
     @ObservedObject private var viewModel: MealViewModel
-    @State private var appear = false
+    @State var appear = [false, false, false]
     @State private var isFavourite = false
     @State private var viewStateSize: CGSize = .zero
     @State private var showVideo = false
@@ -37,11 +37,12 @@ struct MealView: View {
                     cover
                     listSwitcherForm
                         .padding(.top, 30)
+                        .opacity(appear[2] ? 1 : 0)
                 }
             }
             .coordinateSpace(name: "scroll")
             .background(Color("Background"))
-            .mask(RoundedRectangle(cornerRadius: appear ? 0 : 30))
+            .mask(RoundedRectangle(cornerRadius: appear[0] ? 0 : 30))
             .background(.ultraThinMaterial)
         }
         .ignoresSafeArea()
@@ -85,6 +86,7 @@ struct MealView: View {
                             .offset(y: scrollY > 0 ? -scrollY * 1.8 : 0)
                             .padding(10)
                             .padding(.bottom, 150)
+                            .opacity(appear[2] ? 1 : 0)
                     }
                 }
             }
@@ -96,7 +98,7 @@ struct MealView: View {
                     .blur(radius: scrollY > 0 ? scrollY / 10 : 0)
             )
             .mask(
-                RoundedRectangle(cornerRadius: appear ? 0 : 30)
+                RoundedRectangle(cornerRadius: appear[0] ? 0 : 30)
                     .matchedGeometryEffect(id: "mask\(viewModel.meal)", in: namespace)
                     .offset(y: scrollY > 0 ? -scrollY : 0)
             )
@@ -174,7 +176,7 @@ struct MealView: View {
             .cornerRadius(30)
             .blur(radius: 30)
             .matchedGeometryEffect(id: "blur\(viewModel.meal)", in: namespace)
-            .opacity(appear ? 0 : 1)
+            .opacity(appear[0] ? 0 : 1)
     }
 
     var cardForm: some View {
@@ -182,7 +184,7 @@ struct MealView: View {
            .fill(.ultraThinMaterial)
            .cornerRadius(30)
            .shadow(radius: 5)
-           .opacity(appear ? 1 : 0)
+           .opacity(appear[0] ? 1 : 0)
     }
 
     var listSwitcherForm: some View {
@@ -196,7 +198,7 @@ struct MealView: View {
         )
         .padding(20)
         .matchedGeometryEffect(id: "blurSwitch\(viewModel.meal)", in: namespace)
-        .opacity(appear ? 1 : 0)
+        .opacity(appear[1] ? 1 : 0)
     }
 
     func close() {
@@ -210,13 +212,23 @@ struct MealView: View {
 
     func fadeIn() {
         withAnimation(.easeOut.delay(0.3)) {
-            appear = true
+            appear[0] = true
+        }
+        withAnimation(.easeOut.delay(0.4)) {
+            appear[1] = true
+        }
+        withAnimation(.easeOut.delay(0.5)) {
+            appear[2] = true
         }
     }
 
     func fadeOut() {
+        withAnimation(.easeIn(duration: 0.05)) {
+            appear[2] = false
+        }
         withAnimation(.easeIn(duration: 0.1)) {
-            appear = false
+            appear[0] = false
+            appear[1] = false
         }
     }
 
