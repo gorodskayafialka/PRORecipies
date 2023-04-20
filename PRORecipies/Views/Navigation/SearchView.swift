@@ -12,6 +12,7 @@ struct SearchView: View {
     @StateObject var searchViewModel: SearchViewModel
     @State var searchText: String = ""
     @State var contentHasScrolled: Bool = false
+    @Binding var showSheet: Bool
 
     var body: some View {
         ZStack {
@@ -29,7 +30,7 @@ struct SearchView: View {
 
                 list
             }
-            .overlay(NavigationBar(title: NavigationTitle.search.rawValue, contentHasScrolled: $contentHasScrolled))
+            .overlay(NavigationBar(title: NavigationTitle.search.rawValue, contentHasScrolled: $contentHasScrolled, showSheet: $showSheet))
         }
         .onAppearedOnce {
             searchViewModel.fetchSearchedMeals()
@@ -81,6 +82,6 @@ struct SearchView: View {
 
 struct ExploreView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(searchViewModel: SearchViewModel(networkService: .mock))
+        SearchView(searchViewModel: SearchViewModel(networkService: .mock), showSheet: .constant(false))
     }
 }
