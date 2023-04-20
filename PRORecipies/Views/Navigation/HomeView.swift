@@ -11,6 +11,7 @@ struct HomeView: View {
     @EnvironmentObject var uiViewModel: UIViewModel
     @StateObject var homeViewModel: HomeViewModel
     @Namespace var namespace
+    @Binding var showSheet: Bool
 
     @State private var contentHasScrolled = false
     @State private var selectedFeatureMeal: Meal? = nil
@@ -67,7 +68,7 @@ struct HomeView: View {
                 uiViewModel.showNav.toggle()
             }
         }
-        .overlay(NavigationBar(title: NavigationTitle.home.rawValue, contentHasScrolled: $contentHasScrolled))
+        .overlay(NavigationBar(title: NavigationTitle.home.rawValue, contentHasScrolled: $contentHasScrolled, showSheet: $showSheet))
     }
 
     var list: some View {
@@ -155,7 +156,7 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(homeViewModel: HomeViewModel(networkService: .mock))
+        HomeView(homeViewModel: HomeViewModel(networkService: .mock), showSheet: .constant(false))
             .environmentObject(UIViewModel())
     }
 }

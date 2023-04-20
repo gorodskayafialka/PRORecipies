@@ -15,6 +15,7 @@ struct TabBar: View {
     @EnvironmentObject var uiViewModel: UIViewModel
     private let networkService: NetworkService
     private let viewModels: TabBarViewModels
+    @State var showSheet = false
 
     init(networkService: NetworkService) {
         self.networkService = networkService
@@ -26,20 +27,23 @@ struct TabBar: View {
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
             TabView(selection: $selectedTab) {
-                HomeView(homeViewModel: viewModels.home)
+                HomeView(homeViewModel: viewModels.home, showSheet: $showSheet)
                     .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[0])
-                SearchView(searchViewModel: viewModels.search)
+                SearchView(searchViewModel: viewModels.search, showSheet: $showSheet)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[1])
                 ShakeView(viewModel: viewModels.shake)
                     .environmentObject(uiViewModel)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[2])
-                FavoritesView(viewModel: viewModels.favourite)
+                FavoritesView(viewModel: viewModels.favourite, showSheet: $showSheet)
                     .ignoresSafeArea(.all, edges: .all)
                     .tag(tabItems[3])
+            }
+            .sheet(isPresented: $showSheet) {
+                SettingsView(settingsViewModel: SettingsViewModel(networkService: networkService))
             }
 
             customTabs

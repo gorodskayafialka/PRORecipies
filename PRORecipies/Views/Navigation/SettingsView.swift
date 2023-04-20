@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import Charts
 
 struct SettingsView: View {
+    @StateObject var settingsViewModel: SettingsViewModel
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -17,6 +19,8 @@ struct SettingsView: View {
                     .ignoresSafeArea()
 
                 List {
+                    barChart
+
                     settingsSection
                         .listRowBackground(Color("tabbar"))
 
@@ -35,6 +39,11 @@ struct SettingsView: View {
                     Text("Close")
                 }
             }
+            .onAppear {
+                settingsViewModel.fetchMeals()
+                print(settingsViewModel.countries)
+            }
+
         }
     }
 
@@ -47,6 +56,18 @@ struct SettingsView: View {
                 Label("Icons", systemImage: "photo")
             }
         }
+    }
+
+    var barChart: some View {
+        Chart {
+            ForEach(Array(settingsViewModel.countries.keys), id: \.self) { key in
+                BarMark(
+                    x: .value(key, key),
+                    y: .value(key, settingsViewModel.countries[key] ?? -1)
+                )
+            }
+        }
+        .frame(height: 250)
     }
 
     var linksSection: some View {
@@ -81,6 +102,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        SettingsView(settingsViewModel: SettingsViewModel(networkService: .mock))
     }
 }
