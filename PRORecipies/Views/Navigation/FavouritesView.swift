@@ -10,6 +10,7 @@ struct FavoritesView: View {
     @EnvironmentObject var uiViewModel: UIViewModel
     @StateObject var viewModel: FavouritesViewModel
     @Namespace var namespace
+    @Binding var showSheet: Bool
 
     @State private var contentHasScrolled = false
 
@@ -46,7 +47,7 @@ struct FavoritesView: View {
             }
             viewModel.fetchFavouritesMeals()
         }
-        .overlay(NavigationBar(title: NavigationTitle.favourites.rawValue, contentHasScrolled: $contentHasScrolled))
+        .overlay(NavigationBar(title: NavigationTitle.favourites.rawValue, contentHasScrolled: $contentHasScrolled, showSheet: $showSheet))
     }
 
     var list: some View {
@@ -85,7 +86,7 @@ struct FavoritesView: View {
 
 struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
-        FavoritesView(viewModel: FavouritesViewModel(networkService: .mock))
+        FavoritesView(viewModel: FavouritesViewModel(networkService: .mock), showSheet: .constant(false))
             .environmentObject(UIViewModel())
     }
 }

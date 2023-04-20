@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct NavigationBar: View {
-    var title = ""
+    var title: String
     @Binding var contentHasScrolled: Bool
-    @State var showSheet: Bool = false
+    @Binding var showSheet: Bool
     @EnvironmentObject var uiViewModel: UIViewModel
 
     var body: some View {
@@ -37,9 +37,6 @@ struct NavigationBar: View {
                 .foregroundColor(.secondary)
                 .background(.ultraThinMaterial)
                 .cornerRadius(14)
-        }
-        .sheet(isPresented: $showSheet) {
-            SettingsView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         .padding(.top, 64)
@@ -70,7 +67,7 @@ struct NavigationBar: View {
 
 struct NavigationBar_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationBar(contentHasScrolled: .constant(false))
+        NavigationBar(title: "Navigation", contentHasScrolled: .constant(false), showSheet: .constant(false))
             .environmentObject(UIViewModel())
     }
 }
