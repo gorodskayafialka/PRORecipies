@@ -40,9 +40,6 @@ struct ListsSwitcher: View {
 
                     HStack(alignment: .top) {
                         CheckboxField(isMarked: $listViewModel.ingredientsCheckBoxes[index])
-                            .onTapGesture {
-                                listViewModel.ingredientsCheckBoxes[index].toggle()
-                            }
                             .padding(.top, 5)
                             .padding(.trailing, 5)
 
@@ -54,6 +51,9 @@ struct ListsSwitcher: View {
                     }.padding(.horizontal, 30)
                         .padding(.vertical, 15)
                         .font(.title3)
+                        .onTapGesture {
+                            listViewModel.ingredientsCheckBoxes[index].toggle()
+                        }
 
                     if index != ingredientsList.count - 1 {
                         Divider().padding(.horizontal, 30)
@@ -64,9 +64,6 @@ struct ListsSwitcher: View {
 
                     HStack(alignment: .top) {
                         CheckboxField(isMarked: $listViewModel.instructionsCheckBoxes[index])
-                            .onTapGesture {
-                                listViewModel.instructionsCheckBoxes[index].toggle()
-                            }
                             .padding(.top, 5)
                             .padding(.trailing, 5)
 
@@ -77,6 +74,9 @@ struct ListsSwitcher: View {
                     }.padding(.horizontal, 30)
                         .padding(.vertical, 15)
                         .font(.title3)
+                        .onTapGesture {
+                            listViewModel.instructionsCheckBoxes[index].toggle()
+                        }
 
                     if index != recepieList.count - 1 {
                         Divider().padding(.horizontal, 30)
