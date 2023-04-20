@@ -26,15 +26,16 @@ final class ListSwitcherViewModel: ObservableObject {
         self.storage = storage
         self.ingredientsCheckBoxes = Array.init(repeating: false, count: self.meal.ingredients?.count ?? 0)
         self.instructionsCheckBoxes = Array.init(repeating: false, count: self.meal.instructions?.count ?? 0)
+        getCheckboxesMarks()
     }
 
     func getCheckboxesMarks() {
-        let lists = storage.getMarksLists(mealName: meal.name ?? "", ingredArraySize: meal.ingredients?.count ?? 0, instructArraySize: meal.instructions?.count ?? 0)
+        let lists = storage.getMarksLists(mealName: meal.id, ingredArraySize: meal.ingredients?.count ?? 0, instructArraySize: meal.instructions?.count ?? 0)
         ingredientsCheckBoxes = lists[0]
         instructionsCheckBoxes = lists[1]
     }
 
     private func saveCheckboxesMarks() {
-        storage.saveMarksList(mealName: meal.name ?? "", lists: [ingredientsCheckBoxes, instructionsCheckBoxes])
+        storage.saveMarksList(mealName: meal.id, lists: [ingredientsCheckBoxes, instructionsCheckBoxes])
     }
 }
