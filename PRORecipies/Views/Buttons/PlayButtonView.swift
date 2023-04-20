@@ -1,4 +1,4 @@
-//
+    //
 //  PlayButtonView.swift
 //  PRORecipies
 //
@@ -18,6 +18,7 @@ struct PlayButtonView: View {
                 )
                 .frame(width: 36, height: 36)
         }
+        .offset(x: 3)
         .frame(width: 80, height: 80)
         .background(.ultraThinMaterial)
         .cornerRadius(40)

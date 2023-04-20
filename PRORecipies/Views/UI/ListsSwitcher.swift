@@ -20,14 +20,14 @@ extension String {
 
 struct ListsSwitcher: View {
     @State private var chosenList = Lists.ingredients
+    @ObservedObject private var listViewModel: ListSwitcherViewModel
     private let ingredientsList: [Ingredient]
     private let recepieList: [String]
-    @StateObject var listViewModel: ListSwitcherViewModel
 
     init(ingredientsList: [Ingredient], instructions: String, meal: Meal) {
         self.ingredientsList = ingredientsList
         self.recepieList = InstructionsParser.parse(instruction: instructions)
-        _listViewModel = StateObject(wrappedValue: ListSwitcherViewModel(meal: meal))
+        listViewModel = ListSwitcherViewModel(meal: meal)
     }
 
     var body: some View {
@@ -86,7 +86,7 @@ struct ListsSwitcher: View {
         }
         .foregroundColor(.primary)
         .padding(.bottom, 10)
-        .onAppear{
+        .onAppear {
             listViewModel.getCheckboxesMarks()
         }
     }
