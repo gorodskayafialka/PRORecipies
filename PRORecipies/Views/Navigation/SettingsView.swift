@@ -41,7 +41,6 @@ struct SettingsView: View {
             }
             .onAppear {
                 settingsViewModel.fetchMeals()
-                print(settingsViewModel.countries)
             }
 
         }
@@ -59,15 +58,20 @@ struct SettingsView: View {
     }
 
     var barChart: some View {
-        Chart {
-            ForEach(Array(settingsViewModel.countries.keys), id: \.self) { key in
-                BarMark(
-                    x: .value(key, key),
-                    y: .value(key, settingsViewModel.countries[key] ?? -1)
-                )
+        Section("Statistics") {
+            Chart {
+                ForEach(Array(settingsViewModel.countries.keys), id: \.self) { key in
+                    BarMark(
+                        x: .value("Country", settingsViewModel.countries[key] ?? -1),
+                        y: .value("Country", key)
+                    )
+                    .foregroundStyle(by: .value("Count", key))
+                }
             }
+            .chartLegend(.hidden)
+            .padding(10)
+            .frame(height: 250)
         }
-        .frame(height: 250)
     }
 
     var linksSection: some View {
