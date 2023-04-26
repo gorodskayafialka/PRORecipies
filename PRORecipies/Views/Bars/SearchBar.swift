@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SearchBar: View {
-    @EnvironmentObject var uiViewModel: UIViewModel
     @Binding var text: String
     @State private var isEditing = false
     @FocusState private var isFocused: Bool
@@ -16,11 +15,8 @@ struct SearchBar: View {
     var body: some View {
         HStack {
 
-            TextField("Search for a meal", text: $text) { _ in
-                withAnimation(.linear(duration: 0.3)) {
-                    uiViewModel.showTab.toggle()
-                }
-            }
+            TextField("Search for a meal", text: $text)
+            
             .padding(7)
             .padding(.horizontal, 25)
             .background(.ultraThinMaterial)
