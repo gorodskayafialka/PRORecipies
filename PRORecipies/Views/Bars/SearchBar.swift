@@ -16,7 +16,7 @@ struct SearchBar: View {
         HStack {
 
             TextField("Search for a meal", text: $text)
-            
+
             .padding(7)
             .padding(.horizontal, 25)
             .background(.ultraThinMaterial)
