@@ -53,6 +53,7 @@ struct TabBar: View {
                     selectedTab = tabItems.first ?? Tab.home.tabItem
                 }
         }
+        .ignoresSafeArea(.keyboard)
     }
 
     var customTabs: some View {

@@ -20,6 +20,7 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func makeCountries(from: [Meal]) {
+        countries = [:]
         for meal in meals {
             guard let country = meal.area else { continue }
             countries[country, default: 0] += 1
